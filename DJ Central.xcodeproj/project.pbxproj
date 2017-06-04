@@ -196,6 +196,7 @@
 				TargetAttributes = {
 					C0B4425A1EE3A2C8009E3B6B = {
 						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = SWZ7G84L24;
 						ProvisioningStyle = Automatic;
 					};
 					C0B442711EE3A2C8009E3B6B = {
@@ -418,6 +419,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = SWZ7G84L24;
 				INFOPLIST_FILE = "DJ Central/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jwenterprises.DJ-Central";
@@ -430,6 +432,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = SWZ7G84L24;
 				INFOPLIST_FILE = "DJ Central/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jwenterprises.DJ-Central";
