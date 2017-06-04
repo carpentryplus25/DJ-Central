@@ -3,7 +3,7 @@
 //  DJ Central
 //
 //  Created by Joseph Thompson on 6/3/17.
-//  Copyright © 2017 Joseph Thompson. All rights reserved.
+//  Copyright © 2017 J.W. Enterprises LLC. All rights reserved.
 //
 
 import UIKit
