@@ -14,9 +14,17 @@
 		C0B4426C1EE3A2C8009E3B6B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C0B4426A1EE3A2C8009E3B6B /* LaunchScreen.storyboard */; };
 		C0B442771EE3A2C8009E3B6B /* DJ_CentralTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B442761EE3A2C8009E3B6B /* DJ_CentralTests.swift */; };
 		C0B442821EE3A2C8009E3B6B /* DJ_CentralUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B442811EE3A2C8009E3B6B /* DJ_CentralUITests.swift */; };
+		F21861DB1EE4F9EE009F6CE1 /* NowPlayingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21861DA1EE4F9EE009F6CE1 /* NowPlayingViewController.swift */; };
+		F21861DC1EE4FF75009F6CE1 /* eurof55.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F21861D41EE4DC38009F6CE1 /* eurof55.ttf */; };
+		F21861DD1EE4FF75009F6CE1 /* eurof35.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F21861D51EE4DC38009F6CE1 /* eurof35.ttf */; };
+		F21861DE1EE4FF75009F6CE1 /* eurof36.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F21861D31EE4DC38009F6CE1 /* eurof36.ttf */; };
+		F21861DF1EE4FF75009F6CE1 /* eurof56.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F21861D71EE4DC38009F6CE1 /* eurof56.ttf */; };
+		F21861E01EE4FF75009F6CE1 /* eurof76.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F21861D61EE4DC38009F6CE1 /* eurof76.ttf */; };
+		F21861E11EE4FF75009F6CE1 /* eurof75.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F21861D81EE4DC38009F6CE1 /* eurof75.ttf */; };
 		F2314F0A1EE3AF2B00BED488 /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2314F091EE3AF2B00BED488 /* TabViewController.swift */; };
 		F2314F0C1EE3B11C00BED488 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2314F0B1EE3B11C00BED488 /* ViewController.swift */; };
 		F2314F0E1EE3CAD900BED488 /* ServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2314F0D1EE3CAD900BED488 /* ServiceManager.swift */; };
+		F27DDB571EE838D500F2F46C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F27DDB561EE838D500F2F46C /* AudioToolbox.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,9 +58,18 @@
 		C0B4427D1EE3A2C8009E3B6B /* DJ CentralUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "DJ CentralUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0B442811EE3A2C8009E3B6B /* DJ_CentralUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJ_CentralUITests.swift; sourceTree = "<group>"; };
 		C0B442831EE3A2C8009E3B6B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F21861D31EE4DC38009F6CE1 /* eurof36.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = eurof36.ttf; sourceTree = "<group>"; };
+		F21861D41EE4DC38009F6CE1 /* eurof55.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = eurof55.ttf; sourceTree = "<group>"; };
+		F21861D51EE4DC38009F6CE1 /* eurof35.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = eurof35.ttf; sourceTree = "<group>"; };
+		F21861D61EE4DC38009F6CE1 /* eurof76.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = eurof76.ttf; sourceTree = "<group>"; };
+		F21861D71EE4DC38009F6CE1 /* eurof56.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = eurof56.ttf; sourceTree = "<group>"; };
+		F21861D81EE4DC38009F6CE1 /* eurof75.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = eurof75.ttf; sourceTree = "<group>"; };
+		F21861DA1EE4F9EE009F6CE1 /* NowPlayingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NowPlayingViewController.swift; sourceTree = "<group>"; };
 		F2314F091EE3AF2B00BED488 /* TabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
 		F2314F0B1EE3B11C00BED488 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		F2314F0D1EE3CAD900BED488 /* ServiceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceManager.swift; sourceTree = "<group>"; };
+		F27DDB541EE838D500F2F46C /* DJ Central.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "DJ Central.entitlements"; sourceTree = "<group>"; };
+		F27DDB561EE838D500F2F46C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F27DDB571EE838D500F2F46C /* AudioToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +105,8 @@
 				C0B442751EE3A2C8009E3B6B /* DJ CentralTests */,
 				C0B442801EE3A2C8009E3B6B /* DJ CentralUITests */,
 				C0B4425C1EE3A2C8009E3B6B /* Products */,
+				F21861D91EE4DC51009F6CE1 /* Fonts */,
+				F27DDB551EE838D500F2F46C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -103,7 +123,9 @@
 		C0B4425D1EE3A2C8009E3B6B /* DJ Central */ = {
 			isa = PBXGroup;
 			children = (
+				F27DDB541EE838D500F2F46C /* DJ Central.entitlements */,
 				C0B4425E1EE3A2C8009E3B6B /* AppDelegate.swift */,
+				F21861DA1EE4F9EE009F6CE1 /* NowPlayingViewController.swift */,
 				C0B442621EE3A2C8009E3B6B /* Main.storyboard */,
 				F2314F0B1EE3B11C00BED488 /* ViewController.swift */,
 				F2314F0D1EE3CAD900BED488 /* ServiceManager.swift */,
@@ -132,6 +154,27 @@
 				C0B442831EE3A2C8009E3B6B /* Info.plist */,
 			);
 			path = "DJ CentralUITests";
+			sourceTree = "<group>";
+		};
+		F21861D91EE4DC51009F6CE1 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				F21861D41EE4DC38009F6CE1 /* eurof55.ttf */,
+				F21861D51EE4DC38009F6CE1 /* eurof35.ttf */,
+				F21861D31EE4DC38009F6CE1 /* eurof36.ttf */,
+				F21861D71EE4DC38009F6CE1 /* eurof56.ttf */,
+				F21861D61EE4DC38009F6CE1 /* eurof76.ttf */,
+				F21861D81EE4DC38009F6CE1 /* eurof75.ttf */,
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
+		F27DDB551EE838D500F2F46C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F27DDB561EE838D500F2F46C /* AudioToolbox.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -204,6 +247,20 @@
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = SWZ7G84L24;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.InterAppAudio = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+							com.apple.iCloud = {
+								enabled = 0;
+							};
+						};
 					};
 					C0B442711EE3A2C8009E3B6B = {
 						CreatedOnToolsVersion = 8.3.2;
@@ -242,9 +299,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F21861E11EE4FF75009F6CE1 /* eurof75.ttf in Resources */,
 				C0B4426C1EE3A2C8009E3B6B /* LaunchScreen.storyboard in Resources */,
 				C0B442691EE3A2C8009E3B6B /* Assets.xcassets in Resources */,
+				F21861DC1EE4FF75009F6CE1 /* eurof55.ttf in Resources */,
+				F21861DE1EE4FF75009F6CE1 /* eurof36.ttf in Resources */,
 				C0B442641EE3A2C8009E3B6B /* Main.storyboard in Resources */,
+				F21861E01EE4FF75009F6CE1 /* eurof76.ttf in Resources */,
+				F21861DF1EE4FF75009F6CE1 /* eurof56.ttf in Resources */,
+				F21861DD1EE4FF75009F6CE1 /* eurof35.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,6 +336,7 @@
 				C0B442671EE3A2C8009E3B6B /* DJ_Central.xcdatamodeld in Sources */,
 				F2314F0C1EE3B11C00BED488 /* ViewController.swift in Sources */,
 				C0B4425F1EE3A2C8009E3B6B /* AppDelegate.swift in Sources */,
+				F21861DB1EE4F9EE009F6CE1 /* NowPlayingViewController.swift in Sources */,
 				F2314F0E1EE3CAD900BED488 /* ServiceManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -427,6 +491,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "DJ Central/DJ Central.entitlements";
 				DEVELOPMENT_TEAM = SWZ7G84L24;
 				INFOPLIST_FILE = "DJ Central/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -440,6 +505,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "DJ Central/DJ Central.entitlements";
 				DEVELOPMENT_TEAM = SWZ7G84L24;
 				INFOPLIST_FILE = "DJ Central/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

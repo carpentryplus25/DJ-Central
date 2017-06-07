@@ -12,7 +12,6 @@ import AVFoundation
 
 class ViewController: UIViewController {
 
-    @IBOutlet weak var connectionsLabel: UILabel!
     var musicPlayer = AVAudioPlayer()
     let serviceManager = ServiceManager()
     
@@ -23,16 +22,7 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
 
-    @IBAction func redtapped(_ sender: Any) {
-        self.change(color: .red)
-        serviceManager.send(colorName: "red")
     
-    }
-    
-    @IBAction func yellowTapped(_ sender: Any) {
-        self.change(color: .yellow)
-        serviceManager.send(colorName: "yellow")
-    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -59,7 +49,7 @@ class ViewController: UIViewController {
 extension ViewController: ServiceManagerDelegate {
     func connectedDevicesChanged(manager: ServiceManager, connectedDevices: [String]) {
         OperationQueue.main.addOperation {
-            self.connectionsLabel.text = "Connections: \(connectedDevices)"
+            
         }
     }
     
