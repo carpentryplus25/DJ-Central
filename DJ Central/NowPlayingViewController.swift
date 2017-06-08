@@ -13,9 +13,10 @@ import CoreImage
 class NowPlayingViewController: UITableViewController {
 
     
+    @IBOutlet weak var progressIndicator: UISlider!
     @IBOutlet weak var searchButton: UIBarButtonItem!
     @IBOutlet weak var menuButton: UIBarButtonItem!
-    @IBOutlet weak var progressIndicator: UIProgressView!
+    //@IBOutlet weak var progressIndicator: UIProgressView!
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var skipButton: UIButton!
     @IBOutlet weak var percentageRemainingLabel: UILabel!
@@ -27,6 +28,7 @@ class NowPlayingViewController: UITableViewController {
     var mediaPlayer = MPMusicPlayerApplicationController()
     var defaultMediaLibrary = MPMediaLibrary()
     lazy var musicPlayer = MPMusicPlayerController.applicationQueuePlayer()
+    var timer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +43,7 @@ class NowPlayingViewController: UITableViewController {
         mediaPlayer = MPMusicPlayerApplicationController.applicationQueuePlayer()
         mediaPlayer.setQueue(with: MPMediaQuery.songs())
         mediaPlayer.play()
+        startTimer()
         mediaPlayer.beginGeneratingPlaybackNotifications()
          // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -57,13 +60,18 @@ class NowPlayingViewController: UITableViewController {
     func handleNowPlayingItemChanged(_ notification: NSNotification) {
         let currentItem: MPMediaItem = self.mediaPlayer.nowPlayingItem!
         songTitle.text = currentItem.value(forProperty: MPMediaItemPropertyTitle) as? String
-        let artWork = currentItem.value(forProperty: MPMediaItemPropertyArtwork) as? MPMediaItemArtwork
-        let image = artWork?.image(at: CGSize(width: 300, height: 300))
+        guard let artWork = currentItem.value(forProperty: MPMediaItemPropertyArtwork) as? MPMediaItemArtwork else {
+            return
+        }
+        
+        
+        
+        let image = artWork.image(at: CGSize(width: 300, height: 300))
         albumArtWorkImage.image = image
         let blurImage = CIImage(image: image!)
         let blurFilter = CIFilter(name: "CIGaussianBlur")
         blurFilter?.setValue(blurImage, forKey: kCIInputImageKey)
-        blurFilter?.setValue(9, forKey: kCIInputRadiusKey)
+        blurFilter?.setValue(25, forKey: kCIInputRadiusKey)
         let context = CIContext()
         let cgImage = context.createCGImage((blurFilter?.outputImage)!, from: (blurImage!.extent))
         let blurredImage = UIImage(cgImage: cgImage!)
@@ -72,8 +80,9 @@ class NowPlayingViewController: UITableViewController {
         let centerPoint = CGPoint(x: self.albumArtWorkImage.center.x, y: self.albumArtWorkImage.center.y)
         self.navigationController?.navigationBar.barTintColor = self.albumArtWorkImage.image?.getPixelColor(centerPoint)
         self.navigationController?.toolbar.barTintColor = self.albumArtWorkImage.image?.getPixelColor(centerPoint)
-        progressIndicator.trackTintColor = self.albumArtWorkImage.image?.getPixelColor(centerPoint)
-        progressIndicator.progressTintColor = self.albumArtWorkImage.image?.inversedColor(centerPoint)
+        progressIndicator.minimumTrackTintColor = self.albumArtWorkImage.image?.getPixelColor(centerPoint)
+        progressIndicator.thumbTintColor = self.albumArtWorkImage.image?.inversedColor(centerPoint)
+        progressIndicator.maximumTrackTintColor = self.albumArtWorkImage.image?.inversedColor(centerPoint)
         favoriteButton.tintColor = self.albumArtWorkImage.image?.inversedColor(centerPoint)
         skipButton.tintColor = self.albumArtWorkImage.image?.inversedColor(centerPoint)
         songTitle.textColor = self.albumArtWorkImage.image?.inversedColor(centerPoint)
@@ -82,9 +91,50 @@ class NowPlayingViewController: UITableViewController {
         UIBarButtonItem.appearance().tintColor = self.albumArtWorkImage.image?.inversedColor(centerPoint)
         menuButton.tintColor = self.albumArtWorkImage.image?.inversedColor(centerPoint)
         searchButton.tintColor = self.albumArtWorkImage.image?.inversedColor(centerPoint)
+        startTimer()
         
         
         
+    }
+    
+    func handlePlaybackStateChanged(_ notification: NSNotification) {
+        
+    }
+    
+    func updateSlider(_ timer: Timer) {
+        if mediaPlayer.playbackState == MPMusicPlaybackState.playing {
+            let minute_ = abs(Int(mediaPlayer.currentPlaybackTime / 60))
+            let second_ = abs(Int(mediaPlayer.currentPlaybackTime.truncatingRemainder(dividingBy: 60)))
+            let minute = minute_ > 9 ? "\(minute_)" : "0\(minute_)"
+            let second = second_ > 9 ? "\(second_)" : "0\(second_)"
+            percentageCompleteLabel.text = "\(minute):\(second)"
+            let minutesRemaining_ = abs(Int((mediaPlayer.nowPlayingItem?.playbackDuration)! / 60)) - minute_
+            var secondsRemaining_ = abs(Int((mediaPlayer.nowPlayingItem?.playbackDuration.truncatingRemainder(dividingBy: 60))!))
+            if secondsRemaining_ <= 00 {
+                secondsRemaining_ = 59 - second_
+            }else {
+               secondsRemaining_ = abs(Int((mediaPlayer.nowPlayingItem?.playbackDuration.truncatingRemainder(dividingBy: 60))!)) - second_
+            }
+            let secondsRemaining = secondsRemaining_ > 9 ? "\(secondsRemaining_)" : "0\(secondsRemaining_)"
+            let minutesRemaining = minutesRemaining_ > 9 ? "-\(minutesRemaining_) " : "-0\(minutesRemaining_)"
+            
+            
+            percentageRemainingLabel.text = "\(minutesRemaining):\(secondsRemaining)"
+            print(secondsRemaining)
+            progressIndicator.value = Float(mediaPlayer.currentPlaybackTime)
+            progressIndicator.maximumValue = Float((mediaPlayer.nowPlayingItem?.playbackDuration)!)
+            
+        }
+    }
+    
+    func startTimer() {
+        if timer == nil {
+            timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateSlider), userInfo: nil, repeats: true)
+        }
+    }
+    
+    func stopTimer() {
+        timer?.invalidate()
     }
     
     override func viewDidAppear(_ animated: Bool) {

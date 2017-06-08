@@ -24,8 +24,9 @@
 		F2314F0A1EE3AF2B00BED488 /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2314F091EE3AF2B00BED488 /* TabViewController.swift */; };
 		F2314F0C1EE3B11C00BED488 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2314F0B1EE3B11C00BED488 /* ViewController.swift */; };
 		F2314F0E1EE3CAD900BED488 /* ServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2314F0D1EE3CAD900BED488 /* ServiceManager.swift */; };
+		F24E2A0F1EE9E2D00031FE20 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24E2A0E1EE9E2D00031FE20 /* MainViewController.swift */; };
+		F24E2A111EE9E8950031FE20 /* HostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24E2A101EE9E8950031FE20 /* HostViewController.swift */; };
 		F27DDB571EE838D500F2F46C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F27DDB561EE838D500F2F46C /* AudioToolbox.framework */; };
-		F27DDB591EE91AA100F2F46C /* MediaPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F27DDB581EE91A9600F2F46C /* MediaPlayer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,9 +70,10 @@
 		F2314F091EE3AF2B00BED488 /* TabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
 		F2314F0B1EE3B11C00BED488 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		F2314F0D1EE3CAD900BED488 /* ServiceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceManager.swift; sourceTree = "<group>"; };
+		F24E2A0E1EE9E2D00031FE20 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainViewController.swift; path = ../MainViewController.swift; sourceTree = "<group>"; };
+		F24E2A101EE9E8950031FE20 /* HostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HostViewController.swift; sourceTree = "<group>"; };
 		F27DDB541EE838D500F2F46C /* DJ Central.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "DJ Central.entitlements"; sourceTree = "<group>"; };
 		F27DDB561EE838D500F2F46C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		F27DDB581EE91A9600F2F46C /* MediaPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaPlayer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,9 +128,10 @@
 			isa = PBXGroup;
 			children = (
 				F27DDB541EE838D500F2F46C /* DJ Central.entitlements */,
+				F24E2A0E1EE9E2D00031FE20 /* MainViewController.swift */,
 				C0B4425E1EE3A2C8009E3B6B /* AppDelegate.swift */,
 				F21861DA1EE4F9EE009F6CE1 /* NowPlayingViewController.swift */,
-				F27DDB581EE91A9600F2F46C /* MediaPlayer.swift */,
+				F24E2A101EE9E8950031FE20 /* HostViewController.swift */,
 				C0B442621EE3A2C8009E3B6B /* Main.storyboard */,
 				F2314F0B1EE3B11C00BED488 /* ViewController.swift */,
 				F2314F0D1EE3CAD900BED488 /* ServiceManager.swift */,
@@ -335,8 +338,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F24E2A111EE9E8950031FE20 /* HostViewController.swift in Sources */,
+				F24E2A0F1EE9E2D00031FE20 /* MainViewController.swift in Sources */,
 				F2314F0A1EE3AF2B00BED488 /* TabViewController.swift in Sources */,
-				F27DDB591EE91AA100F2F46C /* MediaPlayer.swift in Sources */,
 				C0B442671EE3A2C8009E3B6B /* DJ_Central.xcdatamodeld in Sources */,
 				F2314F0C1EE3B11C00BED488 /* ViewController.swift in Sources */,
 				C0B4425F1EE3A2C8009E3B6B /* AppDelegate.swift in Sources */,
