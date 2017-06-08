@@ -38,7 +38,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="425.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Blurry art" translatesAutoresizingMaskIntoConstraints="NO" id="KfE-IC-3EP">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Blurry art" translatesAutoresizingMaskIntoConstraints="NO" id="KfE-IC-3EP">
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="426"/>
                                                 </imageView>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Art" translatesAutoresizingMaskIntoConstraints="NO" id="HgG-H3-C8W">
@@ -106,16 +106,16 @@
                                                 <constraint firstItem="2Xg-b9-FPj" firstAttribute="leading" secondItem="7HM-TO-Wjf" secondAttribute="trailing" constant="8" id="74x-hd-hqZ"/>
                                                 <constraint firstItem="U4Q-Rq-dlQ" firstAttribute="centerY" secondItem="5hb-AH-rzf" secondAttribute="centerY" constant="137.66999999999999" id="9NW-5e-l1S"/>
                                                 <constraint firstItem="HgG-H3-C8W" firstAttribute="centerX" secondItem="5hb-AH-rzf" secondAttribute="centerX" id="Bfc-Cy-dIX"/>
+                                                <constraint firstItem="KfE-IC-3EP" firstAttribute="leading" secondItem="5hb-AH-rzf" secondAttribute="leading" id="Hd8-eU-2zM"/>
                                                 <constraint firstItem="gHz-o0-aU4" firstAttribute="centerX" secondItem="5hb-AH-rzf" secondAttribute="centerX" id="JFE-KV-TLZ"/>
                                                 <constraint firstItem="7HM-TO-Wjf" firstAttribute="centerX" secondItem="5hb-AH-rzf" secondAttribute="centerX" constant="-149" id="KYC-UP-Xsu"/>
                                                 <constraint firstItem="Ftw-QK-IJb" firstAttribute="leading" secondItem="5hb-AH-rzf" secondAttribute="leadingMargin" constant="32" id="LHE-YE-x40"/>
-                                                <constraint firstAttribute="bottom" secondItem="KfE-IC-3EP" secondAttribute="bottom" constant="-0.33000000000000002" id="Lag-WL-PIa"/>
                                                 <constraint firstItem="U4Q-Rq-dlQ" firstAttribute="leading" secondItem="2Xg-b9-FPj" secondAttribute="trailing" constant="5" id="OI9-ak-22O"/>
+                                                <constraint firstAttribute="bottom" secondItem="KfE-IC-3EP" secondAttribute="bottom" id="RUe-T8-EnW"/>
+                                                <constraint firstItem="KfE-IC-3EP" firstAttribute="top" secondItem="5hb-AH-rzf" secondAttribute="top" id="TwI-rP-ine"/>
                                                 <constraint firstItem="2Xg-b9-FPj" firstAttribute="centerX" secondItem="5hb-AH-rzf" secondAttribute="centerX" id="UrK-gi-cF6"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="Ftw-QK-IJb" secondAttribute="trailing" constant="32" id="cs2-tX-g6X"/>
-                                                <constraint firstItem="KfE-IC-3EP" firstAttribute="top" secondItem="5hb-AH-rzf" secondAttribute="top" id="gIk-UX-nch"/>
                                                 <constraint firstItem="U4Q-Rq-dlQ" firstAttribute="centerX" secondItem="5hb-AH-rzf" secondAttribute="centerX" constant="146" id="hKK-eN-ALi"/>
-                                                <constraint firstItem="KfE-IC-3EP" firstAttribute="leading" secondItem="5hb-AH-rzf" secondAttribute="leading" id="ibH-JU-xph"/>
                                                 <constraint firstItem="HgG-H3-C8W" firstAttribute="centerY" secondItem="5hb-AH-rzf" secondAttribute="centerY" id="mnu-Xq-VPS"/>
                                                 <constraint firstItem="gHz-o0-aU4" firstAttribute="top" secondItem="2Xg-b9-FPj" secondAttribute="bottom" constant="8" id="woQ-fA-pOe"/>
                                                 <constraint firstItem="Ftw-QK-IJb" firstAttribute="top" secondItem="5hb-AH-rzf" secondAttribute="topMargin" constant="29" id="x3L-1P-d1T"/>

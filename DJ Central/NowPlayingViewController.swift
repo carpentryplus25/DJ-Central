@@ -24,52 +24,51 @@ class NowPlayingViewController: UITableViewController {
     @IBOutlet weak var songTitle: UILabel!
     @IBOutlet weak var albumArtWorkImage: UIImageView!
     @IBOutlet weak var percentageCompleteLabel: UILabel!
-    var musicPlayer = MPMusicPlayerController()
+    var mediaPlayer = MPMusicPlayerApplicationController()
+    var defaultMediaLibrary = MPMediaLibrary()
+    lazy var musicPlayer = MPMusicPlayerController.applicationQueuePlayer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let mediaPlayer = MPMusicPlayerApplicationController.applicationQueuePlayer()
+        
+        defaultMediaLibrary.beginGeneratingLibraryChangeNotifications()
+
+        let notificationCenter: NotificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(NowPlayingViewController.handleNowPlayingItemChanged), name: NSNotification.Name.MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(handleNowPlayingItemChanged), name: NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange, object: self.mediaPlayer)
+        notificationCenter.addObserver(self, selector: #selector(handleNowPlayingItemChanged), name: NSNotification.Name.MPMusicPlayerControllerVolumeDidChange, object: self.mediaPlayer)
+        mediaPlayer = MPMusicPlayerApplicationController.applicationQueuePlayer()
         mediaPlayer.setQueue(with: MPMediaQuery.songs())
         mediaPlayer.play()
-        //let mediaPlayback: MPMediaPlayback?
-        //progressIndicator.progress = Float(mediaPlayer.currentPlaybackTime)
-        let audioInfo = MPNowPlayingInfoCenter.default()
-        let artWork = mediaPlayer.nowPlayingItem?.value(forProperty: MPMediaItemPropertyArtwork) as? MPMediaItemArtwork
-        let image = artWork?.image(at: CGSize(width: 300, height: 300))
-        self.albumArtWorkImage.image = image
-        
-        //let playerItem
-        
-        DispatchQueue.main.async {
-            
-            
-            
-        }
-        
-        
-        // Uncomment the following line to preserve selection between presentations
+        mediaPlayer.beginGeneratingPlaybackNotifications()
+         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        let mediaPlayer = MPMusicPlayerApplicationController.applicationQueuePlayer()
-        let artWork = mediaPlayer.nowPlayingItem?.value(forProperty: MPMediaItemPropertyArtwork) as? MPMediaItemArtwork
-        let title = mediaPlayer.nowPlayingItem?.value(forProperty: MPMediaItemPropertyTitle)
+    deinit {
+        mediaPlayer.endGeneratingPlaybackNotifications()
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    func handleNowPlayingItemChanged(_ notification: NSNotification) {
+        let currentItem: MPMediaItem = self.mediaPlayer.nowPlayingItem!
+        songTitle.text = currentItem.value(forProperty: MPMediaItemPropertyTitle) as? String
+        let artWork = currentItem.value(forProperty: MPMediaItemPropertyArtwork) as? MPMediaItemArtwork
         let image = artWork?.image(at: CGSize(width: 300, height: 300))
-        songTitle.text = title as! String
-        self.albumArtWorkImage.image = image
+        albumArtWorkImage.image = image
         let blurImage = CIImage(image: image!)
         let blurFilter = CIFilter(name: "CIGaussianBlur")
-        blurFilter?.setValue(blurImage, forKey: "inputImage")
-        let outputImage = blurFilter?.value(forKeyPath: "outputImage") as! CIImage
+        blurFilter?.setValue(blurImage, forKey: kCIInputImageKey)
+        blurFilter?.setValue(9, forKey: kCIInputRadiusKey)
         let context = CIContext()
-        let cgImage = context.createCGImage((blurFilter?.outputImage)!, from: (blurFilter?.outputImage?.extent)!)
+        let cgImage = context.createCGImage((blurFilter?.outputImage)!, from: (blurImage!.extent))
         let blurredImage = UIImage(cgImage: cgImage!)
         backgroundImage.image = blurredImage
+        print("Changed")
         let centerPoint = CGPoint(x: self.albumArtWorkImage.center.x, y: self.albumArtWorkImage.center.y)
         self.navigationController?.navigationBar.barTintColor = self.albumArtWorkImage.image?.getPixelColor(centerPoint)
         self.navigationController?.toolbar.barTintColor = self.albumArtWorkImage.image?.getPixelColor(centerPoint)
@@ -86,25 +85,15 @@ class NowPlayingViewController: UITableViewController {
         
         
         
-        
     }
-    /*
+    
+    override func viewDidAppear(_ animated: Bool) {
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
-        //self.navigationController?.navigationBar.barTintColor = self.albumArtWorkImage.image?.getPixelColor(CGPoint(x: view.center.x, y: view.center.y))
-        //self.navigationController?.toolbar.barTintColor = self.albumArtWorkImage.image?.getPixelColor(CGPoint(x: view.center.x, y: view.center.y))
-        progressIndicator.trackTintColor = self.albumArtWorkImage.image?.getPixelColor(CGPoint(x: self.albumArtWorkImage.center.x, y: self.albumArtWorkImage.center.y))
-        progressIndicator.progressTintColor = inverseColor(color: (self.albumArtWorkImage.image?.getPixelColor(CGPoint(x: self.albumArtWorkImage.center.x, y: self.albumArtWorkImage.center.y)))!
-        )
-        favoriteButton.tintColor = inverseColor(color: (self.albumArtWorkImage.image?.getPixelColor(CGPoint(x: self.albumArtWorkImage.center.x, y: self.albumArtWorkImage.center.y)))!)
-        skipButton.tintColor = inverseColor(color: (self.albumArtWorkImage.image?.getPixelColor(CGPoint(x: self.albumArtWorkImage.center.x, y: self.albumArtWorkImage.center.y)))!)
-        songTitle.textColor = inverseColor(color: (self.albumArtWorkImage.image?.getPixelColor(CGPoint(x: self.albumArtWorkImage.center.x, y: self.albumArtWorkImage.center.y)))!)
-        percentageCompleteLabel.textColor = inverseColor(color: (self.albumArtWorkImage.image?.getPixelColor(CGPoint(x: self.albumArtWorkImage.center.x, y: self.albumArtWorkImage.center.y)))!)
-        percentageRemainingLabel.textColor = inverseColor(color: (self.albumArtWorkImage.image?.getPixelColor(CGPoint(x: view.center.x, y: view.center.y)))!)
-        UIBarButtonItem.appearance().tintColor = inverseColor(color: (self.albumArtWorkImage.image?.getPixelColor(CGPoint(x: view.center.x, y: view.center.y)))!)
-        menuButton.tintColor = inverseColor(color: (self.albumArtWorkImage.image?.getPixelColor(CGPoint(x: self.albumArtWorkImage.center.x, y: self.albumArtWorkImage.center.y)))!)
-        searchButton.tintColor = inverseColor(color: (self.albumArtWorkImage.image?.getPixelColor(CGPoint(x: self.albumArtWorkImage.center.x, y: self.albumArtWorkImage.center.y)))!)
+     
     }
-    */
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -123,11 +112,6 @@ class NowPlayingViewController: UITableViewController {
         let context = CGContext(data: bitmapData, width: pixelsWide, height: pixelsHigh, bitsPerComponent: 8, bytesPerRow: bitmapBytesPerRow, space: colorSpace, bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue)
         return context!
     }
-    
-    
-    
-    
-
     func updateProgressIndicator () {
         
     }
@@ -226,7 +210,7 @@ extension UIImage {
         let g = CGFloat(data[pixelInfo+1]) / CGFloat(255.0)
         let b = CGFloat(data[pixelInfo+2]) / CGFloat(255.0)
         let a = CGFloat(data[pixelInfo+3]) / CGFloat(255.0)
-        print("color is r: \(r) g: \(g) b: \(b) a: \(a)")
+        //print("color is r: \(r) g: \(g) b: \(b) a: \(a)")
         return UIColor(red: r, green: g, blue: b, alpha: a)
     }
     
@@ -239,7 +223,7 @@ extension UIImage {
         let g = CGFloat(data[pixelInfo+1]) / CGFloat(255.0)
         let b = CGFloat(data[pixelInfo+2]) / CGFloat(255.0)
         let a = CGFloat(data[pixelInfo+3]) / CGFloat(255.0)
-        print("inversedcolor is r: \(1.0 - r) g: \(1.0 - g) b: \(1.0 - b) a: \(a)")
+        //print("inversedcolor is r: \(1.0 - r) g: \(1.0 - g) b: \(1.0 - b) a: \(a)")
         return UIColor(red: 1.0 - r , green: 1.0 - g, blue: 1.0 - b, alpha: a)
     }
     
