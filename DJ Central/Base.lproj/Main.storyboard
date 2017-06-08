@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16G8c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="SFY-iP-4nh">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.17" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="SFY-iP-4nh">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.14"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -24,7 +24,7 @@
             <objects>
                 <tableViewController id="vrl-yf-WoT" customClass="NowPlayingViewController" customModule="DJ_Central" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="401" sectionHeaderHeight="28" sectionFooterHeight="28" id="2aU-wJ-SLj">
-                        <rect key="frame" x="0.0" y="64" width="375" height="559"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="separatorColor" red="0.68627450980392157" green="0.68627450980392157" blue="0.68627450980392157" alpha="1" colorSpace="calibratedRGB"/>
@@ -49,7 +49,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Back Down South" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ftw-QK-IJb">
-                                                    <rect key="frame" x="40" y="37" width="295" height="25.5"/>
+                                                    <rect key="frame" x="40" y="37" width="295" height="29.5"/>
                                                     <fontDescription key="fontDescription" name="Eurofurencebold" family="eurofurence" pointSize="25"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -71,7 +71,7 @@
                                                         <constraint firstAttribute="height" constant="37" id="yB6-6K-ZMB"/>
                                                     </constraints>
                                                 </stackView>
-                                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="4zH-U9-FnH">
+                                                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" minimumValueImage="Min" maximumValueImage="Max" translatesAutoresizingMaskIntoConstraints="NO" id="4zH-U9-FnH">
                                                     <rect key="frame" x="65.5" y="324" width="244" height="31"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="240" id="7VQ-eK-qUD"/>
@@ -88,7 +88,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U4Q-Rq-dlQ">
-                                                    <rect key="frame" x="323" y="334.5" width="26" height="11.5"/>
+                                                    <rect key="frame" x="320" y="334" width="32" height="13"/>
                                                     <fontDescription key="fontDescription" name="Eurofurenceregular" family="eurofurence" pointSize="11"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -125,7 +125,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Playlist" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5tR-QA-a2k">
-                                                    <rect key="frame" x="137" y="5" width="101" height="35.5"/>
+                                                    <rect key="frame" x="131.5" y="2" width="112.5" height="41.5"/>
                                                     <fontDescription key="fontDescription" name="Eurofurencebold" family="eurofurence" pointSize="35.419998168945312"/>
                                                     <color key="textColor" red="0.68627450980392157" green="0.68627450980392157" blue="0.68627450980392157" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -166,13 +166,13 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Madness" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b95-g7-zCj">
-                                                    <rect key="frame" x="89" y="11.5" width="212" height="17.5"/>
+                                                    <rect key="frame" x="89" y="9" width="212" height="20"/>
                                                     <fontDescription key="fontDescription" name="Eurofurencebold" family="eurofurence" pointSize="17"/>
                                                     <color key="textColor" red="0.68627450980392157" green="0.68627450980392157" blue="0.68627450980392157" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Muse" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DZG-K9-a6m">
-                                                    <rect key="frame" x="89" y="29" width="212" height="17.5"/>
+                                                    <rect key="frame" x="89" y="29" width="212" height="20"/>
                                                     <fontDescription key="fontDescription" name="Eurofurenceregular" family="eurofurence" pointSize="17"/>
                                                     <color key="textColor" red="0.68627450980000004" green="0.68627450980000004" blue="0.68627450980000004" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -266,7 +266,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="TVp-ol-L0S"/>
                                     <barButtonItem style="plain" id="6L9-BQ-Mf4">
                                         <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="G3S-TN-hoW">
-                                            <rect key="frame" x="181" y="2.5" width="30" height="39"/>
+                                            <rect key="frame" x="180.5" y="2.5" width="30" height="39"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <state key="normal" image="Browse"/>
                                             <connections>
@@ -277,7 +277,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="Ffd-cU-Y2C"/>
                                     <barButtonItem style="plain" id="4MU-R3-md3">
                                         <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="AZD-c1-rKG">
-                                            <rect key="frame" x="252" y="2" width="28" height="40"/>
+                                            <rect key="frame" x="252.5" y="2" width="28" height="40"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <state key="normal" image="Library"/>
                                             <connections>
@@ -424,7 +424,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Wek-tq-Y0k">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="539"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
@@ -622,10 +622,12 @@
         <image name="Art" width="480" height="480"/>
         <image name="Blurry art" width="800" height="799"/>
         <image name="Browse" width="30" height="39"/>
-        <image name="Favorites" width="37" height="37"/>
+        <image name="Favorites" width="25" height="26"/>
         <image name="Host" width="24" height="37"/>
         <image name="Library" width="28" height="40"/>
-        <image name="Menu 2" width="28" height="25"/>
+        <image name="Max" width="182" height="5"/>
+        <image name="Menu 2" width="22" height="22"/>
+        <image name="Min" width="182" height="5"/>
         <image name="Mini Art" width="96" height="96"/>
         <image name="Now_Playing" width="57" height="40"/>
         <image name="Skip" width="43" height="37"/>
