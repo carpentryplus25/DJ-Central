@@ -27,7 +27,7 @@ class NowPlayingViewController: UITableViewController {
     @IBOutlet weak var percentageCompleteLabel: UILabel!
     var mediaPlayer = MPMusicPlayerApplicationController()
     var defaultMediaLibrary = MPMediaLibrary()
-    lazy var musicPlayer = MPMusicPlayerController.applicationQueuePlayer()
+    lazy var musicPlayer = MPMusicPlayerController.applicationQueuePlayer
     var timer: Timer?
     
     override func viewDidLoad() {
@@ -40,7 +40,7 @@ class NowPlayingViewController: UITableViewController {
         notificationCenter.addObserver(self, selector: #selector(NowPlayingViewController.handleNowPlayingItemChanged), name: NSNotification.Name.MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
         notificationCenter.addObserver(self, selector: #selector(handleNowPlayingItemChanged), name: NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange, object: self.mediaPlayer)
         notificationCenter.addObserver(self, selector: #selector(handleNowPlayingItemChanged), name: NSNotification.Name.MPMusicPlayerControllerVolumeDidChange, object: self.mediaPlayer)
-        mediaPlayer = MPMusicPlayerApplicationController.applicationQueuePlayer()
+        mediaPlayer = MPMusicPlayerApplicationController.applicationQueuePlayer
         mediaPlayer.setQueue(with: MPMediaQuery.songs())
         mediaPlayer.play()
         startTimer()
@@ -57,7 +57,7 @@ class NowPlayingViewController: UITableViewController {
         NotificationCenter.default.removeObserver(self)
     }
     
-    func handleNowPlayingItemChanged(_ notification: NSNotification) {
+    @objc func handleNowPlayingItemChanged(_ notification: NSNotification) {
         let currentItem: MPMediaItem = self.mediaPlayer.nowPlayingItem!
         songTitle.text = currentItem.value(forProperty: MPMediaItemPropertyTitle) as? String
         guard let artWork = currentItem.value(forProperty: MPMediaItemPropertyArtwork) as? MPMediaItemArtwork else {
@@ -101,7 +101,7 @@ class NowPlayingViewController: UITableViewController {
         
     }
     
-    func updateSlider(_ timer: Timer) {
+    @objc func updateSlider(_ timer: Timer) {
         if mediaPlayer.playbackState == MPMusicPlaybackState.playing {
             let minute_ = abs(Int(mediaPlayer.currentPlaybackTime / 60))
             let second_ = abs(Int(mediaPlayer.currentPlaybackTime.truncatingRemainder(dividingBy: 60)))

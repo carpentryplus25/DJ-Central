@@ -12,11 +12,11 @@ import MultipeerConnectivity
 protocol  ServiceManagerDelegate {
     func connectedDevicesChanged(manager: ServiceManager, connectedDevices: [String])
     func colorChanged(manager: ServiceManager, colorString: String)
-   
+    
 }
 
 class ServiceManager: NSObject {
-
+    
     private let serviceType = "dj-central"
     private let myPeerId = MCPeerID(displayName: UIDevice.current.name)
     private let serviceAdvertiser: MCNearbyServiceAdvertiser
@@ -107,12 +107,17 @@ extension ServiceManager: MCSessionDelegate {
         NSLog("%@", "didStartReceivingResourceWithName")
     }
     
-    func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL, withError error: Error?) {
+    func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL??, withError error: Error?) {
         NSLog("%@", "didFinishReceivingResourceWithName")
     }
     
+    func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
+        
+    }
     
-    
+    func session(_ session: MCSession, didReceiveCertificate certificate: [Any]?, fromPeer peerID: MCPeerID, certificateHandler: @escaping (Bool) -> Void) {
+        
+    }
     
     
     
