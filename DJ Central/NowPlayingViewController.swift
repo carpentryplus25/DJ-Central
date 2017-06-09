@@ -40,9 +40,9 @@ class NowPlayingViewController: UITableViewController {
         notificationCenter.addObserver(self, selector: #selector(NowPlayingViewController.handleNowPlayingItemChanged), name: NSNotification.Name.MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
         notificationCenter.addObserver(self, selector: #selector(handleNowPlayingItemChanged), name: NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange, object: self.mediaPlayer)
         notificationCenter.addObserver(self, selector: #selector(handleNowPlayingItemChanged), name: NSNotification.Name.MPMusicPlayerControllerVolumeDidChange, object: self.mediaPlayer)
-        mediaPlayer = MPMusicPlayerApplicationController.applicationQueuePlayer()
-        mediaPlayer.setQueue(with: MPMediaQuery.songs())
-        mediaPlayer.play()
+        //mediaPlayer = MPMusicPlayerApplicationController.applicationQueuePlayer()
+        //mediaPlayer.setQueue(with: MPMediaQuery.songs())
+        //mediaPlayer.play()
         startTimer()
         mediaPlayer.beginGeneratingPlaybackNotifications()
          // Uncomment the following line to preserve selection between presentations
@@ -63,9 +63,6 @@ class NowPlayingViewController: UITableViewController {
         guard let artWork = currentItem.value(forProperty: MPMediaItemPropertyArtwork) as? MPMediaItemArtwork else {
             return
         }
-        
-        
-        
         let image = artWork.image(at: CGSize(width: 300, height: 300))
         albumArtWorkImage.image = image
         let blurImage = CIImage(image: image!)

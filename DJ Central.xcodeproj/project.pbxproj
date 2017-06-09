@@ -21,11 +21,13 @@
 		F21861DF1EE4FF75009F6CE1 /* eurof56.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F21861D71EE4DC38009F6CE1 /* eurof56.ttf */; };
 		F21861E01EE4FF75009F6CE1 /* eurof76.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F21861D61EE4DC38009F6CE1 /* eurof76.ttf */; };
 		F21861E11EE4FF75009F6CE1 /* eurof75.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F21861D81EE4DC38009F6CE1 /* eurof75.ttf */; };
+		F21D724F1EEA52B800A6D22F /* MusicQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21D724E1EEA52B800A6D22F /* MusicQuery.swift */; };
 		F2314F0A1EE3AF2B00BED488 /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2314F091EE3AF2B00BED488 /* TabViewController.swift */; };
 		F2314F0C1EE3B11C00BED488 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2314F0B1EE3B11C00BED488 /* ViewController.swift */; };
 		F2314F0E1EE3CAD900BED488 /* ServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2314F0D1EE3CAD900BED488 /* ServiceManager.swift */; };
 		F24E2A0F1EE9E2D00031FE20 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24E2A0E1EE9E2D00031FE20 /* MainViewController.swift */; };
 		F24E2A111EE9E8950031FE20 /* HostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24E2A101EE9E8950031FE20 /* HostViewController.swift */; };
+		F26B86401EEA849A00638648 /* SongsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26B863F1EEA849A00638648 /* SongsTableViewCell.swift */; };
 		F27DDB571EE838D500F2F46C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F27DDB561EE838D500F2F46C /* AudioToolbox.framework */; };
 /* End PBXBuildFile section */
 
@@ -67,11 +69,13 @@
 		F21861D71EE4DC38009F6CE1 /* eurof56.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = eurof56.ttf; sourceTree = "<group>"; };
 		F21861D81EE4DC38009F6CE1 /* eurof75.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = eurof75.ttf; sourceTree = "<group>"; };
 		F21861DA1EE4F9EE009F6CE1 /* NowPlayingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NowPlayingViewController.swift; sourceTree = "<group>"; };
+		F21D724E1EEA52B800A6D22F /* MusicQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicQuery.swift; sourceTree = "<group>"; };
 		F2314F091EE3AF2B00BED488 /* TabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
 		F2314F0B1EE3B11C00BED488 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		F2314F0D1EE3CAD900BED488 /* ServiceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceManager.swift; sourceTree = "<group>"; };
 		F24E2A0E1EE9E2D00031FE20 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainViewController.swift; path = ../MainViewController.swift; sourceTree = "<group>"; };
 		F24E2A101EE9E8950031FE20 /* HostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HostViewController.swift; sourceTree = "<group>"; };
+		F26B863F1EEA849A00638648 /* SongsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongsTableViewCell.swift; sourceTree = "<group>"; };
 		F27DDB541EE838D500F2F46C /* DJ Central.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "DJ Central.entitlements"; sourceTree = "<group>"; };
 		F27DDB561EE838D500F2F46C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -131,8 +135,10 @@
 				F24E2A0E1EE9E2D00031FE20 /* MainViewController.swift */,
 				C0B4425E1EE3A2C8009E3B6B /* AppDelegate.swift */,
 				F21861DA1EE4F9EE009F6CE1 /* NowPlayingViewController.swift */,
+				F21D724E1EEA52B800A6D22F /* MusicQuery.swift */,
 				F24E2A101EE9E8950031FE20 /* HostViewController.swift */,
 				C0B442621EE3A2C8009E3B6B /* Main.storyboard */,
+				F26B863F1EEA849A00638648 /* SongsTableViewCell.swift */,
 				F2314F0B1EE3B11C00BED488 /* ViewController.swift */,
 				F2314F0D1EE3CAD900BED488 /* ServiceManager.swift */,
 				C0B442681EE3A2C8009E3B6B /* Assets.xcassets */,
@@ -338,8 +344,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F26B86401EEA849A00638648 /* SongsTableViewCell.swift in Sources */,
 				F24E2A111EE9E8950031FE20 /* HostViewController.swift in Sources */,
 				F24E2A0F1EE9E2D00031FE20 /* MainViewController.swift in Sources */,
+				F21D724F1EEA52B800A6D22F /* MusicQuery.swift in Sources */,
 				F2314F0A1EE3AF2B00BED488 /* TabViewController.swift in Sources */,
 				C0B442671EE3A2C8009E3B6B /* DJ_Central.xcdatamodeld in Sources */,
 				F2314F0C1EE3B11C00BED488 /* ViewController.swift in Sources */,
