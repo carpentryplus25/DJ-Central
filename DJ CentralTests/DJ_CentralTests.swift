@@ -2,8 +2,8 @@
 //  DJ_CentralTests.swift
 //  DJ CentralTests
 //
-//  Created by Joseph Thompson on 6/3/17.
-//  Copyright © 2017 Joseph Thompson. All rights reserved.
+//  Created by William Thompson on 6/3/17.
+//  Copyright © 2017 J. W. Enterprises, LLC. All rights reserved.
 //
 
 import XCTest

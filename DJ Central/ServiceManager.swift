@@ -3,7 +3,7 @@
 //  DJ Central
 //
 //  Created by William Thompson on 6/4/17.
-//  Copyright © 2017 J.W. Enerprises. All rights reserved.
+//  Copyright © 2017 J. W. Enerprises. All rights reserved.
 //
 
 import UIKit
@@ -12,11 +12,11 @@ import MultipeerConnectivity
 protocol  ServiceManagerDelegate {
     func connectedDevicesChanged(manager: ServiceManager, connectedDevices: [String])
     func colorChanged(manager: ServiceManager, colorString: String)
-   
+    
 }
 
 class ServiceManager: NSObject {
-
+    
     private let serviceType = "dj-central"
     private let myPeerId = MCPeerID(displayName: UIDevice.current.name)
     private let serviceAdvertiser: MCNearbyServiceAdvertiser

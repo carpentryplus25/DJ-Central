@@ -537,10 +537,12 @@
         <image name="Art" width="480" height="480"/>
         <image name="Blurry art" width="800" height="799"/>
         <image name="Browse" width="30" height="39"/>
-        <image name="Favorites" width="37" height="37"/>
+        <image name="Favorites" width="25" height="26"/>
         <image name="Host" width="24" height="37"/>
         <image name="Library" width="28" height="40"/>
-        <image name="Menu 2" width="28" height="25"/>
+        <image name="Max" width="182" height="5"/>
+        <image name="Menu 2" width="22" height="22"/>
+        <image name="Min" width="182" height="5"/>
         <image name="Mini Art" width="96" height="96"/>
         <image name="Now_Playing" width="57" height="40"/>
         <image name="Play" width="19" height="36"/>
