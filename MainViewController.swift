@@ -2,8 +2,8 @@
 //  MainViewController.swift
 //  DJ Central
 //
-//  Created by Thompson on 6/8/17.
-//  Copyright © 2017 Joseph Thompson. All rights reserved.
+//  Created by William Thompson on 6/8/17.
+//  Copyright © 2017 J.W Enterprises LLC. All rights reserved.
 //
 
 import UIKit
@@ -24,14 +24,14 @@ class MainViewController: UIViewController {
     @IBOutlet weak var nowPlayingButton: UIBarButtonItem!
     @IBOutlet weak var browseButton: UIBarButtonItem!
     @IBOutlet weak var libraryButton: UIBarButtonItem!
-    var mediaPlayer = MPMusicPlayerApplicationController()
+    var mediaPlayer = MPMusicPlayerController()
     let serviceManger = ServiceManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         serviceManger.delegate = self
         view.bringSubview(toFront: hostView)
-        mediaPlayer = MPMusicPlayerApplicationController.applicationQueuePlayer()
+        mediaPlayer = MPMusicPlayerController.systemMusicPlayer
         mediaPlayer.setQueue(with: MPMediaQuery.songs())
         mediaPlayer.play()
         mediaPlayer.beginGeneratingPlaybackNotifications()
@@ -43,28 +43,33 @@ class MainViewController: UIViewController {
         notificationCenter.addObserver(self, selector: #selector(MainViewController.handleNowPlayingItemChanged), name: NSNotification.Name.MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
     }
     
-    func handleNowPlayingItemChanged(_ notification: NSNotification) {
-        let currentItem: MPMediaItem = mediaPlayer.nowPlayingItem!
-        guard let artwork = currentItem.value(forProperty: MPMediaItemPropertyArtwork) as? MPMediaItemArtwork
-            else {
-                return
-        }
-        let image = artwork.image(at: CGSize(width: 300, height: 300))
-        self.artWorkImage.image = image
-        let centerPoint = CGPoint(x: artWorkImage.center.x, y:artWorkImage.center.y)
-        UIBarButtonItem.appearance().tintColor = artWorkImage.image?.inversedColor(centerPoint)
-        menuButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
-        searchButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
-        favoritesButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
-        hostButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
-        browseButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
-        nowPlayingButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
-        libraryButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
-        print(menuButton.tintColor!)
+    @objc func handleNowPlayingItemChanged(_ notification: NSNotification) {
+        if mediaPlayer.playbackState == .playing {
+            let currentItem: MPMediaItem = mediaPlayer.nowPlayingItem!
+            guard let artwork = currentItem.value(forProperty: MPMediaItemPropertyArtwork) as? MPMediaItemArtwork
+                else {
+                    return
+            }
+            let image = artwork.image(at: CGSize(width: 300, height: 300))
+            self.artWorkImage.image = image
+            let centerPoint = CGPoint(x: artWorkImage.center.x, y:artWorkImage.center.y)
+            UIBarButtonItem.appearance().tintColor = artWorkImage.image?.inversedColor(centerPoint)
+            menuButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
+            searchButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
+            favoritesButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
+            hostButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
+            browseButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
+            nowPlayingButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
+            libraryButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
+            print(menuButton.tintColor!)
         
-        print("changed")
-        
+            print("changed")
         }
+        else {
+            view.sendSubview(toBack: hostView)
+            view.bringSubview(toFront: libraryView)
+        }
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

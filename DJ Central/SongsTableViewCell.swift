@@ -2,8 +2,8 @@
 //  SongsTableViewCell.swift
 //  DJ Central
 //
-//  Created by Thompson on 6/9/17.
-//  Copyright © 2017 Joseph Thompson. All rights reserved.
+//  Created by William Thompson on 6/9/17.
+//  Copyright © 2017 J.W. Enterprises LLC. All rights reserved.
 //
 
 import UIKit
