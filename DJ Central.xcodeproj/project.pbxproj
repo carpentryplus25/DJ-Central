@@ -29,6 +29,8 @@
 		F24E2A111EE9E8950031FE20 /* HostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F24E2A101EE9E8950031FE20 /* HostViewController.swift */; };
 		F26B86401EEA849A00638648 /* SongsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26B863F1EEA849A00638648 /* SongsTableViewCell.swift */; };
 		F27DDB571EE838D500F2F46C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F27DDB561EE838D500F2F46C /* AudioToolbox.framework */; };
+		F2F74F821EF035AF0023F9E9 /* SideRevealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F74F811EF035AE0023F9E9 /* SideRevealViewController.swift */; };
+		F2F74F841EF036080023F9E9 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F74F831EF036080023F9E9 /* MenuViewController.swift */; };
 		F2F750DC1EED836D0015F5A0 /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F750DB1EED836D0015F5A0 /* LibraryViewController.swift */; };
 		F2F750DE1EED871F0015F5A0 /* LibraryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F750DD1EED871F0015F5A0 /* LibraryTableViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -80,6 +82,8 @@
 		F26B863F1EEA849A00638648 /* SongsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongsTableViewCell.swift; sourceTree = "<group>"; };
 		F27DDB541EE838D500F2F46C /* DJ Central.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "DJ Central.entitlements"; sourceTree = "<group>"; };
 		F27DDB561EE838D500F2F46C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		F2F74F811EF035AE0023F9E9 /* SideRevealViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SideRevealViewController.swift; path = ../../../Desktop/SideRevealViewController.swift; sourceTree = "<group>"; };
+		F2F74F831EF036080023F9E9 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		F2F750DB1EED836D0015F5A0 /* LibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
 		F2F750DD1EED871F0015F5A0 /* LibraryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -140,7 +144,9 @@
 				C0B4425E1EE3A2C8009E3B6B /* AppDelegate.swift */,
 				F21861DA1EE4F9EE009F6CE1 /* NowPlayingViewController.swift */,
 				F21D724E1EEA52B800A6D22F /* MusicQuery.swift */,
+				F2F74F811EF035AE0023F9E9 /* SideRevealViewController.swift */,
 				F2F750DB1EED836D0015F5A0 /* LibraryViewController.swift */,
+				F2F74F831EF036080023F9E9 /* MenuViewController.swift */,
 				F24E2A101EE9E8950031FE20 /* HostViewController.swift */,
 				F2F750DD1EED871F0015F5A0 /* LibraryTableViewCell.swift */,
 				C0B442621EE3A2C8009E3B6B /* Main.storyboard */,
@@ -356,6 +362,7 @@
 				F26B86401EEA849A00638648 /* SongsTableViewCell.swift in Sources */,
 				F2F750DC1EED836D0015F5A0 /* LibraryViewController.swift in Sources */,
 				F24E2A111EE9E8950031FE20 /* HostViewController.swift in Sources */,
+				F2F74F841EF036080023F9E9 /* MenuViewController.swift in Sources */,
 				F24E2A0F1EE9E2D00031FE20 /* MainViewController.swift in Sources */,
 				F21D724F1EEA52B800A6D22F /* MusicQuery.swift in Sources */,
 				F2F750DE1EED871F0015F5A0 /* LibraryTableViewCell.swift in Sources */,
@@ -365,6 +372,7 @@
 				C0B4425F1EE3A2C8009E3B6B /* AppDelegate.swift in Sources */,
 				F21861DB1EE4F9EE009F6CE1 /* NowPlayingViewController.swift in Sources */,
 				F2314F0E1EE3CAD900BED488 /* ServiceManager.swift in Sources */,
+				F2F74F821EF035AF0023F9E9 /* SideRevealViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

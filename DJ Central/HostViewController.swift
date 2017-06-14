@@ -3,7 +3,7 @@
 //  DJ Central
 //
 //  Created by William Thompson on 6/8/17.
-//  Copyright © 2017 J.W. Enterprises LLC. All rights reserved.
+//  Copyright © 2017 J.W. Enterprises, LLC. All rights reserved.
 //
 
 import UIKit
@@ -159,7 +159,7 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             
             percentageRemainingLabel.text = "\(minutesRemaining):\(secondsRemaining)"
-            print(secondsRemaining)
+            //print(secondsRemaining)
             progressIndicator.value = Float(mediaPlayer.currentPlaybackTime)
             progressIndicator.maximumValue = Float((mediaPlayer.nowPlayingItem?.playbackDuration)!)
             

@@ -152,12 +152,13 @@
     {
       "size" : "60x60",
       "idiom" : "car",
-      "size" : "60x60",
+      "filename" : "Icon-60@2x-1.png",
       "scale" : "2x"
     },
     {
-      "idiom" : "car",
       "size" : "60x60",
+      "idiom" : "car",
+      "filename" : "Icon-60@3x-1.png",
       "scale" : "3x"
     },
     {

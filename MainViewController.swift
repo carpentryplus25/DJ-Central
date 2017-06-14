@@ -3,14 +3,15 @@
 //  DJ Central
 //
 //  Created by William Thompson on 6/8/17.
-//  Copyright © 2017 J.W Enterprises LLC. All rights reserved.
+//  Copyright © 2017 J.W Enterprises, LLC. All rights reserved.
 //
 
 import UIKit
 import MediaPlayer
 
-class MainViewController: UIViewController {
+class MainViewController: UIViewController, SlideRevealViewDelegate {
 
+    @IBOutlet weak var hostViewTest: UIView!
     @IBOutlet weak var favoritesButton: UIBarButtonItem!
     @IBOutlet weak var hostButton: UIBarButtonItem!
     @IBOutlet weak var artWorkImage: UIImageView!
@@ -26,15 +27,21 @@ class MainViewController: UIViewController {
     @IBOutlet weak var libraryButton: UIBarButtonItem!
     var mediaPlayer = MPMusicPlayerController()
     let serviceManger = ServiceManager()
+    var hostViewController: HostViewController?
+    var interactor = SlideRevealViewInteractor()
+    var delegate: SlideRevealViewDelegate? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        serviceManger.delegate = self
-        view.bringSubview(toFront: hostView)
+        //serviceManger.delegate = self
+        
+        
+        //view.bringSubview(toFront: artWorkImage)
         mediaPlayer = MPMusicPlayerController.systemMusicPlayer
         mediaPlayer.setQueue(with: MPMediaQuery.songs())
         mediaPlayer.play()
         mediaPlayer.beginGeneratingPlaybackNotifications()
+        view.bringSubview(toFront: hostView)
         // Do any additional setup after loading the view.
     }
     
@@ -52,7 +59,7 @@ class MainViewController: UIViewController {
             }
             let image = artwork.image(at: CGSize(width: 300, height: 300))
             self.artWorkImage.image = image
-            let centerPoint = CGPoint(x: artWorkImage.center.x, y:artWorkImage.center.y)
+            let centerPoint = CGPoint(x: artWorkImage.center.x, y: artWorkImage.center.y)
             UIBarButtonItem.appearance().tintColor = artWorkImage.image?.inversedColor(centerPoint)
             menuButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
             searchButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
@@ -73,6 +80,31 @@ class MainViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    /*
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        let centerPoint = CGPoint(x: artWorkImage.center.x, y:artWorkImage.center.y)
+        if {
+            return UIStatusBarStyle.lightContent
+        }
+        else {
+            return UIStatusBarStyle.lightContent
+        }
+        
+        
+        
+        
+    }
+    */
+    
+    func reopenMenu() {
+        performSegue(withIdentifier: "slideMenu", sender: nil)
+    }
+    
+    func slideMenu(_ segueName: String, sender: AnyObject?) {
+        dismiss(animated: true) {
+            self.performSegue(withIdentifier: segueName, sender: sender)
+        }
     }
     
     @IBAction func hostAction(_ sender: Any) {
@@ -125,10 +157,40 @@ class MainViewController: UIViewController {
     
     
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destination = segue.destination as? MenuViewController {
+            destination.transitioningDelegate = self
+            destination.interactor = interactor
+            destination.delegate = self
+        }
+    }
    
+    @IBAction func edgePanGesture(_ sender: UIPanGestureRecognizer) {
+        let translation = sender.translation(in: view)
+        let progress = SlideRevealViewHelper.calculateProgress(translation, viewBounds: view.bounds, direction: .Down)
+        SlideRevealViewHelper.mapGestureStateToInteractor(sender.state, progress: progress, interactor: interactor){
+            self.performSegue(withIdentifier: "slideMenu", sender: nil)
+            print("hello")
+        }
+        
+        
+    }
     
+    func delay(seconds: Double, completion:@escaping ()->()) {
+        let popTime = DispatchTime.now() + Double(Int64( Double(NSEC_PER_SEC) * seconds )) / Double(NSEC_PER_SEC)
+        DispatchQueue.main.asyncAfter(deadline: popTime) {
+            completion()
+        }
+    }
     
-    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        dismiss(animated: true) {
+            self.delay(seconds: 0.5) {
+                self.reopenMenu()
+            }
+        }
+    }
     
     /*
     // MARK: - Navigation
@@ -142,6 +204,28 @@ class MainViewController: UIViewController {
 
 }
 
+extension MainViewController: UIViewControllerTransitioningDelegate {
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return SlideRevealViewAnimator()
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return SlideRevealDismissAnimator()
+    }
+    
+    func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        return interactor.hasStarted ? interactor : nil
+    }
+    
+    func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        return interactor.hasStarted ? interactor : nil
+    }
+    
+    
+    
+}
+
+/*
 extension MainViewController: ServiceManagerDelegate {
     func connectedDevicesChanged(manager: ServiceManager, connectedDevices: [String]) {
         OperationQueue.main.addOperation {
@@ -155,6 +239,6 @@ extension MainViewController: ServiceManagerDelegate {
         }
     }
 }
-
+*/
 
 
