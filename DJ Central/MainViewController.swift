@@ -138,11 +138,12 @@ class MainViewController: UIViewController, SlideRevealViewDelegate {
     
     @IBAction func hostAction(_ sender: Any) {
         view.bringSubview(toFront: hostView)
+        view.sendSubview(toBack: searchView)
         view.sendSubview(toBack: favoritesView)
         view.sendSubview(toBack: libraryView)
         view.sendSubview(toBack: nowPlayingView)
         view.sendSubview(toBack: browseHostLibrary)
-        view.sendSubview(toBack: searchView)
+        
     
     
     }

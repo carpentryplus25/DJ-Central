@@ -41,6 +41,9 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
     var endDate: NSDate!
     var coundDownTimer = Timer()
     var remainingTime: TimeInterval = 0
+    var startDate: NSDate!
+    var countUpTimer = Timer()
+    var startTime: TimeInterval = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -166,13 +169,20 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         
     }
     
-    @objc func updateSlider(_ timer: Timer) {
-        if musicPlayerManager.musicPlayerController.playbackState == MPMusicPlaybackState.playing {
-            let minute_ = abs(Int(musicPlayerManager.musicPlayerController.currentPlaybackTime / 60))
-            let second_ = abs(Int(musicPlayerManager.musicPlayerController.currentPlaybackTime.truncatingRemainder(dividingBy: 60)))
+    @objc func updateSlider() {
+        
+        if musicPlayerManager.musicPlayerController.playbackState == .playing {
+            guard !(musicPlayerManager.musicPlayerController.currentPlaybackTime.isNaN || musicPlayerManager.musicPlayerController.currentPlaybackTime.isInfinite) else {return}
+            let minute_ = Int(musicPlayerManager.musicPlayerController.currentPlaybackTime) / 60
+            let second_ = Int(musicPlayerManager.musicPlayerController.currentPlaybackTime.truncatingRemainder(dividingBy: 60))
             let minute = minute_ > 9 ? "\(minute_)" : "0\(minute_)"
             let second = second_ > 9 ? "\(second_)" : "0\(second_)"
             percentageCompletedLabel.text = "\(minute):\(second)"
+            /*
+            startTime = musicPlayerManager.musicPlayerController.currentPlaybackTime
+            startDate = NSDate().addingTimeInterval(startTime)
+            countUpTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateCountUpLabel), userInfo: nil, repeats: true)
+            */
             remainingTime = (musicPlayerManager.musicPlayerController.nowPlayingItem?.playbackDuration)! - musicPlayerManager.musicPlayerController.currentPlaybackTime
             endDate = NSDate().addingTimeInterval(remainingTime)
             coundDownTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateCountDownLabel), userInfo: nil, repeats: true)
@@ -181,12 +191,18 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     @objc func updateCountDownLabel() {
-        percentageRemainingLabel.text = endDate.timeIntervalSinceNow.mmss
+        percentageRemainingLabel.text = endDate.timeIntervalSinceNow.mmss_
+    }
+    
+    @objc func updateCountUpLabel() {
+        percentageCompletedLabel.text = startDate.timeIntervalSinceNow.mmss
     }
     
     func startTimer() {
-        if timer == nil {
-            timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateSlider), userInfo: nil, repeats: true)
+        if musicPlayerManager.musicPlayerController.playbackState == .playing {
+            if timer == nil {
+                timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateSlider), userInfo: nil, repeats: true)
+            }
         }
     }
     
@@ -284,8 +300,13 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
 }
 
 extension TimeInterval {
-    var mmss: String {
+    var mmss_: String {
         return self < 0 ? "00:00" : String(format:"-%02d:%02d", Int(self / 60), Int(self.truncatingRemainder(dividingBy: 60)))
+    }
+    
+    var mmss: String {
+        return self < 0 ? "00:00" : String(format:"%02d:%02d", Int(self / 60), Int(self.truncatingRemainder(dividingBy: 60)))
+        
     }
     
 }
