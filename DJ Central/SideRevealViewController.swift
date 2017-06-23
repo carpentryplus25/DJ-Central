@@ -109,7 +109,7 @@ extension SlideRevealViewAnimator: UIViewControllerAnimatedTransitioning {
             fromVC.view.isHidden = true
             if UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiom.pad {
                 UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
-                    snapshot.center.x += UIScreen.main.bounds.width * SlideRevealViewHelper.iPadMenuWidth
+                    snapshot.center.y += UIScreen.main.bounds.height * SlideRevealViewHelper.iPadMenuWidth
                 },
                                completion: { _ in
                                 fromVC.view.isHidden = false
@@ -118,7 +118,7 @@ extension SlideRevealViewAnimator: UIViewControllerAnimatedTransitioning {
                 )
             } else {
                 UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
-                    snapshot.center.x += UIScreen.main.bounds.width * SlideRevealViewHelper.menuWidth
+                    snapshot.center.y += UIScreen.main.bounds.height * SlideRevealViewHelper.menuWidth
                 },
                                completion: { _ in
                                 fromVC.view.isHidden = false
