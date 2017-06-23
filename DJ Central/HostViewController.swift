@@ -168,8 +168,8 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     @objc func updateSlider(_ timer: Timer) {
         if musicPlayerManager.musicPlayerController.playbackState == MPMusicPlaybackState.playing {
-            let minute_ = abs(Int(Double(musicPlayerManager.musicPlayerController.currentPlaybackTime / 60)))
-            let second_ = abs(Int(Double(musicPlayerManager.musicPlayerController.currentPlaybackTime.truncatingRemainder(dividingBy: 60))))
+            let minute_ = abs(Int(musicPlayerManager.musicPlayerController.currentPlaybackTime / 60))
+            let second_ = abs(Int(musicPlayerManager.musicPlayerController.currentPlaybackTime.truncatingRemainder(dividingBy: 60)))
             let minute = minute_ > 9 ? "\(minute_)" : "0\(minute_)"
             let second = second_ > 9 ? "\(second_)" : "0\(second_)"
             percentageCompletedLabel.text = "\(minute):\(second)"
