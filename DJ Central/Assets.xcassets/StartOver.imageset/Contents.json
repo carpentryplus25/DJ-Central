@@ -2,12 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Favorites.png",
+      "filename" : "StartOver.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Favorites~universal@3x.png",
+      "filename" : "StartOver@2x.png",
       "scale" : "2x"
     },
     {
