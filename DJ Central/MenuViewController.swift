@@ -7,12 +7,21 @@
 //
 
 import UIKit
+import StoreKit
+import MediaPlayer
 
 class MenuViewController: UIViewController {
     
     var interactor: SlideRevealViewInteractor? = nil
     var delegate: SlideRevealViewDelegate? = nil
     var mainViewController: MainViewController? = nil
+    var authorizationManager: AuthorizationManager!
+    let cloudServiceController = SKCloudServiceController()
+    //let appleMusicManager: AppleMusicManager
+    var cloudServiceCapabilities = SKCloudServiceCapability()
+    var cloudServiceStoreFrontCountryCode = "us"
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +62,7 @@ class MenuViewController: UIViewController {
             }
         }
     }
+ 
     /*
     // MARK: - Navigation
 

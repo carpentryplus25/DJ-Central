@@ -9,6 +9,7 @@
 import UIKit
 import MediaPlayer
 import CoreImage
+import StoreKit
 
 class HostViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -23,8 +24,9 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var artWorkImage: UIImageView!
     @IBOutlet weak var blurArtworkImage: UIImageView!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var reverseSkip: UIButton!
     
-    var mediaPlayer = MPMusicPlayerApplicationController()
+    //var mediaPlayer = MPMusicPlayerApplicationController()
     var mainViewController = MainViewController()
     var artWorkImages: [UIImage]!
     var albumTitle: [String]!
@@ -33,13 +35,17 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
     var timer: Timer?
     var albums: [AlbumInfo] = []
     var musicQuery: MusicQuery = MusicQuery()
-    
+    var musicPlayerManager = MusicPlayerManager()
+    var mediaItems: MediaItem!
+    let imageManager = ImageManager()
+    var endDate: NSDate!
+    var coundDownTimer = Timer()
+    var remainingTime: TimeInterval = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        
+        let appleMusicManager = AppleMusicManager()
+        let authorizationManager = AuthorizationManager(appleMusicManager: appleMusicManager)
         
         MPMediaLibrary.requestAuthorization { (status) in
             if status == .authorized {
@@ -53,6 +59,32 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
         }
         
+ 
+        
+        
+        let notificationCenter: NotificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(handleMusicPlayerNowPlayingItemDidChange), name: NSNotification.Name.MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(handleMusicPlayerDidChangeState), name: NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(handleMusicPlayerDidChangeState), name: NSNotification.Name.MPMusicPlayerControllerVolumeDidChange, object: nil)
+        startTimer()
+        updatePlayBackControls()
+        update()
+        
+        guard SKCloudServiceController.authorizationStatus() == .notDetermined else {
+            return
+        }
+        
+        SKCloudServiceController.requestAuthorization {(authorizationStatus) in
+            switch authorizationStatus {
+            case .authorized:
+                authorizationManager.requestCloudServiceCapabilities()
+                authorizationManager.requestStoreFrontCountryCode()
+            default:
+                break
+            }
+            notificationCenter.post(name: AuthorizationManager.authorizationDidUpdateNotification, object: nil)
+            
+        }
         // Do any additional setup after loading the view.
     }
     
@@ -88,7 +120,7 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidAppear(_ animated: Bool) {
         
         
-        start()
+        
         
     }
 
@@ -97,24 +129,17 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         // Dispose of any resources that can be recreated.
     }
     
-    func start() {
-        let notificationCenter: NotificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(handleNowPlayingItemChanged), name: NSNotification.Name.MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(handleNowPlayingItemChanged), name: NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange, object: self.mediaPlayer)
-        notificationCenter.addObserver(self, selector: #selector(handleNowPlayingItemChanged), name: NSNotification.Name.MPMusicPlayerControllerVolumeDidChange, object: self.mediaPlayer)
-        startTimer()
-    }
-    
-    @objc func handleNowPlayingItemChanged(_ notification: NSNotification) {
+    func update() {
+        let currentItem = musicPlayerManager.musicPlayerController.nowPlayingItem
+            guard let artwork = currentItem?.artwork
+                else {
+                    return
+            }
+        self.songTitleLabel.text = currentItem?.value(forProperty: MPMediaItemPropertyTitle) as? String
         
-        guard let currentItem: MPMediaItem = mainViewController.mediaPlayer.nowPlayingItem, let artwork = currentItem.value(forProperty: MPMediaItemPropertyArtwork) as? MPMediaItemArtwork
-            else {
-             return
-        }
-        self.songTitleLabel.text = currentItem.value(forProperty: MPMediaItemPropertyTitle) as? String
-        let image = artwork.image(at: CGSize(width: 300, height: 300))
+        guard let image = artwork.image(at: self.artWorkImage.frame.size) else {return}
         self.artWorkImage.image = image
-        let blurImage = CIImage(image: image!)
+        let blurImage = CIImage(image: image)
         let blurFilter = CIFilter(name: "CIGaussianBlur")
         blurFilter?.setValue(blurImage, forKey: kCIInputImageKey)
         blurFilter?.setValue(25, forKey: kCIInputRadiusKey)
@@ -122,6 +147,7 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         let cgImage = context.createCGImage((blurFilter?.outputImage)!, from: (blurImage!.extent))
         let blurredImage = UIImage(cgImage: cgImage!)
         self.blurArtworkImage.image = blurredImage
+        
         let centerPoint = CGPoint(x: self.artWorkImage.center.x, y: self.artWorkImage.center.y)
         self.navigationController?.navigationBar.barTintColor = self.artWorkImage.image?.getPixelColor(centerPoint)
         self.navigationController?.toolbar.barTintColor = self.artWorkImage.image?.getPixelColor(centerPoint)
@@ -136,34 +162,26 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.percentageCompletedLabel.textColor = self.artWorkImage.image?.inversedColor(centerPoint)
         self.percentageRemainingLabel.textColor = self.artWorkImage.image?.inversedColor(centerPoint)
         self.playButton.tintColor = self.artWorkImage.image?.inversedColor(centerPoint)
+        self.reverseSkip.tintColor = self.artWorkImage.image?.inversedColor(centerPoint)
+        
     }
     
     @objc func updateSlider(_ timer: Timer) {
-        if mediaPlayer.playbackState == MPMusicPlaybackState.playing {
-            let minute_ = abs(Int(mediaPlayer.currentPlaybackTime / 60))
-            let second_ = abs(Int(mediaPlayer.currentPlaybackTime.truncatingRemainder(dividingBy: 60)))
+        if musicPlayerManager.musicPlayerController.playbackState == MPMusicPlaybackState.playing {
+            let minute_ = abs(Int(Double(musicPlayerManager.musicPlayerController.currentPlaybackTime / 60)))
+            let second_ = abs(Int(Double(musicPlayerManager.musicPlayerController.currentPlaybackTime.truncatingRemainder(dividingBy: 60))))
             let minute = minute_ > 9 ? "\(minute_)" : "0\(minute_)"
             let second = second_ > 9 ? "\(second_)" : "0\(second_)"
             percentageCompletedLabel.text = "\(minute):\(second)"
-            var minutesRemaining_ = abs(Int((mediaPlayer.nowPlayingItem?.playbackDuration)! / 60)) - minute_
-            var secondsRemaining_ = abs(Int((mediaPlayer.nowPlayingItem?.playbackDuration.truncatingRemainder(dividingBy: 60))!))
-            if secondsRemaining_ >= 00 {
-                secondsRemaining_ = secondsRemaining_ - second_
-            }
-            if secondsRemaining_ <= 00 {
-                minutesRemaining_ = minutesRemaining_ - 1
-                secondsRemaining_ = 59 - secondsRemaining_ - second_
-            }
-            let secondsRemaining = secondsRemaining_ > 9 ? "\(secondsRemaining_)" : "0\(secondsRemaining_)"
-            let minutesRemaining = minutesRemaining_ > 9 ? "-\(minutesRemaining_) " : "-0\(minutesRemaining_)"
-            
-            
-            percentageRemainingLabel.text = "\(minutesRemaining):\(secondsRemaining)"
-            //print(secondsRemaining)
-            progressIndicator.value = Float(mediaPlayer.currentPlaybackTime)
-            progressIndicator.maximumValue = Float((mediaPlayer.nowPlayingItem?.playbackDuration)!)
-            
+            remainingTime = (musicPlayerManager.musicPlayerController.nowPlayingItem?.playbackDuration)! - musicPlayerManager.musicPlayerController.currentPlaybackTime
+            endDate = NSDate().addingTimeInterval(remainingTime)
+            coundDownTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateCountDownLabel), userInfo: nil, repeats: true)
+            progressIndicator.value = Float(musicPlayerManager.musicPlayerController.currentPlaybackTime)
+            progressIndicator.maximumValue = Float((musicPlayerManager.musicPlayerController.nowPlayingItem?.playbackDuration)!)
         }
+    }
+    @objc func updateCountDownLabel() {
+        percentageRemainingLabel.text = endDate.timeIntervalSinceNow.mmss
     }
     
     func startTimer() {
@@ -174,11 +192,14 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func stopTimer() {
         timer?.invalidate()
+        coundDownTimer.invalidate()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //let songID = albums[indexPath.section].songs[indexPath.row].songId
-        
+        let songID: NSNumber = albums[indexPath.section].songs[indexPath.row].songId
+        let item: MPMediaItem = musicQuery.getItem(songId: songID)
+        musicPlayerManager.musicPlayerController.nowPlayingItem = item
+        musicPlayerManager.musicPlayerController.play()
     }
     
     
@@ -192,7 +213,7 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let songsCell = tableView.dequeueReusableCell(withIdentifier: "songs") as! SongsTableViewCell
+        let songsCell = tableView.dequeueReusableCell(withIdentifier: "songs") as! SongsTableViewCell
         songsCell.songTitleLabel?.text = albums[indexPath.section].songs[indexPath.row].songTitle
         songsCell.artistLabel?.text = albums[indexPath.section].songs[indexPath.row].artistName
         let songID: NSNumber = albums[indexPath.section].songs[indexPath.row].songId
@@ -202,18 +223,54 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         return songsCell
     }
-
-    @IBAction func playAction(_ sender: Any) {
-        if mainViewController.mediaPlayer.playbackState == MPMusicPlaybackState.playing {
-            playButton.setImage(UIImage(named: "Pause"), for: .normal)
-        }
-        else {
-            playButton.setImage(UIImage(named: "Play"), for: .normal)
-        }
-        
-        
+    
+    
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         
     }
+
+    @IBAction func skipAction(_ sender: Any) {
+        mainViewController.skipToNextItem()
+    }
+    
+    @IBAction func playAction(_ sender: Any) {
+        mainViewController.togglePlayPause()
+    }
+    
+    @IBAction func backwardAction(_ sender: Any) {
+        mainViewController.skipBackToBeginningOrPreviousItem()
+    }
+    
+    func updatePlayBackControls() {
+        let playbackState = musicPlayerManager.musicPlayerController.playbackState
+        switch playbackState {
+        case .paused, .stopped, .interrupted:
+            playButton.setImage(#imageLiteral(resourceName: "Play"), for: .normal)
+            
+        case .playing:
+            playButton.setImage(#imageLiteral(resourceName: "Pause"), for: .normal)
+            
+        default:
+            break
+            
+        }
+    }
+    
+    @objc func handleMusicPlayerDidChangeState() {
+        DispatchQueue.main.async {
+            self.updatePlayBackControls()
+            self.startTimer()
+            self.update()
+        }
+    }
+    
+    @objc func handleMusicPlayerNowPlayingItemDidChange() {
+        DispatchQueue.main.async {
+            self.update()
+        }
+    }
+    
     /*
     // MARK: - Navigation
 
@@ -224,4 +281,11 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     */
 
+}
+
+extension TimeInterval {
+    var mmss: String {
+        return self < 0 ? "00:00" : String(format:"-%02d:%02d", Int(self / 60), Int(self.truncatingRemainder(dividingBy: 60)))
+    }
+    
 }

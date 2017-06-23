@@ -34,13 +34,13 @@ class ServiceManager: NSObject {
         self.serviceBrowser = MCNearbyServiceBrowser(peer: myPeerId, serviceType: serviceType)
         super.init()
         self.serviceAdvertiser.delegate = self
-        self.serviceAdvertiser.startAdvertisingPeer()
+        //self.serviceAdvertiser.startAdvertisingPeer()
         self.serviceBrowser.delegate = self
-        self.serviceBrowser.startBrowsingForPeers()
+        //self.serviceBrowser.startBrowsingForPeers()
     }
     deinit {
-        self.serviceAdvertiser.stopAdvertisingPeer()
-        self.serviceBrowser.stopBrowsingForPeers()
+        //self.serviceAdvertiser.stopAdvertisingPeer()
+        //self.serviceBrowser.stopBrowsingForPeers()
     }
     
     func send(colorName : String) {
