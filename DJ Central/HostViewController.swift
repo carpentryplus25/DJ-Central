@@ -47,25 +47,27 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let appleMusicManager = AppleMusicManager()
-        let authorizationManager = AuthorizationManager(appleMusicManager: appleMusicManager)
-        
+        let notificationCenter: NotificationCenter = NotificationCenter.default
+        guard MPMediaLibrary.authorizationStatus() == .authorized else {return}
         MPMediaLibrary.requestAuthorization { (status) in
-            if status == .authorized {
-                self.albums = self.musicQuery.get(songCategory: "")
+            switch status {
+            case .authorized:
+                self.albums = self.musicQuery.get(songCategory: "Artist")
                 DispatchQueue.main.async {
                     self.tableView?.reloadData()
                 }
+            default:
+                break
             }
-            else {
-                self.displayMediaLibraryError()
-            }
+            notificationCenter.post(name: AuthorizationManager.authorizationDidUpdateNotification, object: nil)
         }
+        
+        
         
  
         
         
-        let notificationCenter: NotificationCenter = NotificationCenter.default
+        
         notificationCenter.addObserver(self, selector: #selector(handleMusicPlayerNowPlayingItemDidChange), name: NSNotification.Name.MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
         notificationCenter.addObserver(self, selector: #selector(handleMusicPlayerDidChangeState), name: NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange, object: nil)
         notificationCenter.addObserver(self, selector: #selector(handleMusicPlayerDidChangeState), name: NSNotification.Name.MPMusicPlayerControllerVolumeDidChange, object: nil)
@@ -76,7 +78,8 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         guard SKCloudServiceController.authorizationStatus() == .notDetermined else {
             return
         }
-        
+        let appleMusicManager = AppleMusicManager()
+        let authorizationManager = AuthorizationManager(appleMusicManager: appleMusicManager)
         SKCloudServiceController.requestAuthorization {(authorizationStatus) in
             switch authorizationStatus {
             case .authorized:
@@ -88,6 +91,9 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
             notificationCenter.post(name: AuthorizationManager.authorizationDidUpdateNotification, object: nil)
             
         }
+       
+        
+        
         // Do any additional setup after loading the view.
     }
     
@@ -126,7 +132,9 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         
     }
-
+    
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -139,7 +147,6 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
                     return
             }
         self.songTitleLabel.text = currentItem?.value(forProperty: MPMediaItemPropertyTitle) as? String
-        
         guard let image = artwork.image(at: self.artWorkImage.frame.size) else {return}
         self.artWorkImage.image = image
         let blurImage = CIImage(image: image)
@@ -150,7 +157,6 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         let cgImage = context.createCGImage((blurFilter?.outputImage)!, from: (blurImage!.extent))
         let blurredImage = UIImage(cgImage: cgImage!)
         self.blurArtworkImage.image = blurredImage
-        
         let centerPoint = CGPoint(x: self.artWorkImage.center.x, y: self.artWorkImage.center.y)
         self.navigationController?.navigationBar.barTintColor = self.artWorkImage.image?.getPixelColor(centerPoint)
         self.navigationController?.toolbar.barTintColor = self.artWorkImage.image?.getPixelColor(centerPoint)
@@ -240,7 +246,17 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         return songsCell
     }
     
-    
+    func changeStatusBarStyle(){
+        if self.progressIndicator.minimumTrackTintColor! <= UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1){
+            print(self.progressIndicator.minimumTrackTintColor!)
+            UINavigationBar.appearance().barStyle = .black
+            
+        }
+        else {
+            UINavigationBar.appearance().barStyle = .default
+            
+        }
+    }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         
@@ -284,6 +300,7 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
     @objc func handleMusicPlayerNowPlayingItemDidChange() {
         DispatchQueue.main.async {
             self.update()
+            
         }
     }
     
@@ -299,14 +316,4 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
 
 }
 
-extension TimeInterval {
-    var mmss_: String {
-        return self < 0 ? "00:00" : String(format:"-%02d:%02d", Int(self / 60), Int(self.truncatingRemainder(dividingBy: 60)))
-    }
-    
-    var mmss: String {
-        return self < 0 ? "00:00" : String(format:"%02d:%02d", Int(self / 60), Int(self.truncatingRemainder(dividingBy: 60)))
-        
-    }
-    
-}
+

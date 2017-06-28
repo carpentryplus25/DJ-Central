@@ -27,6 +27,7 @@ class SearchAppleMusicTableViewController: UIViewController, UITableViewDataSour
         }
     }
     var mainViewController: MainViewController!
+    var menuViewController: MenuViewController!
     
     
     override func viewDidLoad() {
@@ -36,7 +37,7 @@ class SearchAppleMusicTableViewController: UIViewController, UITableViewDataSour
         tableView.estimatedRowHeight = 100
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
-        definesPresentationContext = false
+        definesPresentationContext = true
         searchController.searchBar.delegate = self
         tableView.tableHeaderView = searchController.searchBar
         searchController.hidesNavigationBarDuringPresentation = false
@@ -53,7 +54,9 @@ class SearchAppleMusicTableViewController: UIViewController, UITableViewDataSour
         super.viewWillAppear(animated)
         
     }
-    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        searchController.dismiss(animated: true, completion: nil)
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

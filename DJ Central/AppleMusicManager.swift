@@ -19,7 +19,7 @@ class AppleMusicManager {
         return URLSession(configuration: urlSessionConfiguration)
     }()
     var storeFrontID: String?
-    let url = URL(string: "https://www.jwenterprises.co/wp-content/uploads/2017/06/Token-1.rtf")
+    let url = URL(string: "https://www.jwenterprises.co/2017/06/16/token/")
     
     func readContentsAtFilePath(_ url: URL) -> String {
         let contents = try! String(contentsOf: url, encoding: String.Encoding.utf8)
@@ -27,7 +27,7 @@ class AppleMusicManager {
     }
     
     func fetchDeveloperToken() -> String? {
-        let developerAuthenticationToken: String? = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkdZMks1NU04RkYifQ.eyJpc3MiOiJTV1o3Rzg0TDI0IiwiaWF0IjoxNDk4MTU4NzAxLCJleHAiOjE0OTg3NjM1MDF9.EsdvW7V0wxJ1WI4N97qFSljNir5MFOS5dBjqEZUWDaGUdKwb8Wys0YoXrziqeiQSatxB3mVfUSC9-T6aNo5d-A"
+        let developerAuthenticationToken: String? = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkdZMks1NU04RkYifQ.eyJpc3MiOiJTV1o3Rzg0TDI0IiwiaWF0IjoxNDk4NTk5MzAwLCJleHAiOjE1MTQzNzA5MDB9.JHDTN4EICjdOsb1xa7v-3SlmAM1xP8GZRNp8EnJcKsWTRUqRRL13rannH7VWnrKCLo0BCbbUqzFqRB97GXWxlw"
         return developerAuthenticationToken
     }
     

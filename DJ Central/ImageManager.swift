@@ -12,8 +12,8 @@ class ImageManager {
     
     static let imageCache: NSCache<NSString, UIImage> = {
         let cache = NSCache<NSString, UIImage>()
-        cache.name = "ImageCacheManager"
-        cache.countLimit = 20
+        cache.name = "ImageManager"
+        cache.countLimit = 100
         cache.totalCostLimit = 10 * 1024 * 1024
         return cache
     }()

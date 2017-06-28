@@ -20,12 +20,12 @@ class MenuViewController: UIViewController {
     //let appleMusicManager: AppleMusicManager
     var cloudServiceCapabilities = SKCloudServiceCapability()
     var cloudServiceStoreFrontCountryCode = "us"
-    
+    var isViewPresented: Bool = false
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        isViewPresented = true
         // Do any additional setup after loading the view.
     }
 
@@ -35,9 +35,9 @@ class MenuViewController: UIViewController {
     }
     
     @IBAction func closeMenu(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
-        
-        
+        dismiss(animated: true){
+        self.isViewPresented = false
+        }
     }
     
     @IBAction func handleGesture(_ sender: UIPanGestureRecognizer) {
@@ -59,6 +59,7 @@ class MenuViewController: UIViewController {
         dismiss(animated: true){
             self.delay(seconds: 0.5){
                 self.mainViewController?.reopenMenu()
+                self.isViewPresented = true
             }
         }
     }

@@ -35,6 +35,9 @@ class MainViewController: UIViewController, SlideRevealViewDelegate {
     var delegate: SlideRevealViewDelegate? = nil
     var appleMusicManager = AppleMusicManager()
     var musicPlayerManager = MusicPlayerManager()
+    var menuViewController = MenuViewController()
+    var isSearchPresented: Bool = false
+    var searchAppleMusicTableViewController: SearchAppleMusicTableViewController!
     lazy var authorizationManager: AuthorizationManager = {
         return AuthorizationManager(appleMusicManager: self.appleMusicManager)
     }()
@@ -45,8 +48,9 @@ class MainViewController: UIViewController, SlideRevealViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         authorizationManager.requestMediaLibrayAuthorization()
+        authorizationManager.requestCloudServiceAuthorization()
         view.bringSubview(toFront: hostView)
-        update()
+        updateInterface()
         NotificationCenter.default.addObserver(self,selector: #selector(handleMusicPlayerManagerDidUpdateState),name: NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange,object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleMusicPlayerManagerDidUpdateState), name: NSNotification.Name.MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
         
@@ -55,11 +59,9 @@ class MainViewController: UIViewController, SlideRevealViewDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         authorizationManager.requestCloudServiceCapabilities()
-        
     }
     
-    func update() {
-        
+    func updateInterface() {
             let currentItem = musicPlayerManager.musicPlayerController.nowPlayingItem
             guard let artwork = currentItem?.artwork
                 else {
@@ -76,8 +78,7 @@ class MainViewController: UIViewController, SlideRevealViewDelegate {
             browseButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
             nowPlayingButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
             libraryButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
-            //print(menuButton.tintColor!)
-        
+            changeStatusBarStyle()
             print("changed")
         
         
@@ -109,22 +110,16 @@ class MainViewController: UIViewController, SlideRevealViewDelegate {
         }
     }
     
-    
-    /*
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        let centerPoint = CGPoint(x: artWorkImage.center.x, y:artWorkImage.center.y)
-        if {
-            return UIStatusBarStyle.lightContent
+    func changeStatusBarStyle(){
+        let centerPoint = CGPoint(x: artWorkImage.center.x, y: artWorkImage.center.y)
+        guard (artWorkImage.image != nil) else { return}
+        if menuButton.tintColor! >= (artWorkImage.image?.getPixelColor(centerPoint))!{
+            self.navigationController?.navigationBar.barStyle = .black
         }
         else {
-            return UIStatusBarStyle.lightContent
+            self.navigationController?.navigationBar.barStyle = .default
         }
-        
-        
-        
-        
     }
-    */
     
     func reopenMenu() {
         performSegue(withIdentifier: "slideMenu", sender: nil)
@@ -136,6 +131,17 @@ class MainViewController: UIViewController, SlideRevealViewDelegate {
         }
     }
     
+    @IBAction func menuAction(_ sender: UIBarButtonItem) {
+        if isSearchPresented == true {
+            searchAppleMusicTableViewController = SearchAppleMusicTableViewController()
+            searchAppleMusicTableViewController.searchController.isActive = false
+            self.performSegue(withIdentifier: "slideMenu", sender: nil)
+        }
+        else {
+            self.performSegue(withIdentifier: "slideMenu", sender: nil)
+        }
+    }
+    
     @IBAction func hostAction(_ sender: Any) {
         view.bringSubview(toFront: hostView)
         view.sendSubview(toBack: searchView)
@@ -144,8 +150,6 @@ class MainViewController: UIViewController, SlideRevealViewDelegate {
         view.sendSubview(toBack: nowPlayingView)
         view.sendSubview(toBack: browseHostLibrary)
         
-    
-    
     }
 
     @IBAction func nowPlayingAction(_ sender: Any) {
@@ -194,6 +198,7 @@ class MainViewController: UIViewController, SlideRevealViewDelegate {
     }
     
     @IBAction func searchAction(_ sender: Any) {
+        isSearchPresented = true
         view.bringSubview(toFront: searchView)
         view.sendSubview(toBack: favoritesView)
         view.sendSubview(toBack: libraryView)
@@ -212,8 +217,9 @@ class MainViewController: UIViewController, SlideRevealViewDelegate {
     }
    
     @IBAction func edgePanGesture(_ sender: UIPanGestureRecognizer) {
+        sender.requiresExclusiveTouchType = false
         let translation = sender.translation(in: view)
-        let progress = SlideRevealViewHelper.calculateProgress(translation, viewBounds: view.bounds, direction: .Down)
+        let progress = SlideRevealViewHelper.calculateProgress(translation, viewBounds: view.frame, direction: .Down)
         SlideRevealViewHelper.mapGestureStateToInteractor(sender.state, progress: progress, interactor: interactor){
             self.performSegue(withIdentifier: "slideMenu", sender: nil)
         }
@@ -231,14 +237,17 @@ class MainViewController: UIViewController, SlideRevealViewDelegate {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         dismiss(animated: true) {
             self.delay(seconds: 0.5) {
-                self.reopenMenu()
+                
+                    self.reopenMenu()
+                
             }
         }
     }
     
     @objc func handleMusicPlayerManagerDidUpdateState() {
         DispatchQueue.main.async {
-            self.update()
+            self.updateInterface()
+            self.changeStatusBarStyle()
         }
     }
     
