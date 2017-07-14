@@ -35,8 +35,15 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
     var timer: Timer?
     var albums: [AlbumInfo] = []
     var musicQuery: MusicQuery = MusicQuery()
+    var appleMusicManager = AppleMusicManager()
     var musicPlayerManager = MusicPlayerManager()
-    var mediaItems: MediaItem!
+    lazy var authorizationManager: AuthorizationManager = {
+        return AuthorizationManager(appleMusicManager: self.appleMusicManager)
+    }()
+    lazy var mediaLibraryManager: MediaLibraryManager = {
+        return MediaLibraryManager(authorizationManager: self.authorizationManager)
+    }()
+    var mediaItem = [[MediaItem]]()
     let imageManager = ImageManager()
     var endDate: NSDate!
     var coundDownTimer = Timer()
@@ -44,6 +51,10 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
     var startDate: NSDate!
     var countUpTimer = Timer()
     var startTime: TimeInterval = 0
+    var images: UIImage?
+    var isUsingLocalImage: Bool = false
+    var isUsingCachedImage: Bool = false
+    var isFetchingImage: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,20 +72,11 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
             notificationCenter.post(name: AuthorizationManager.authorizationDidUpdateNotification, object: nil)
         }
-        
-        
-        
- 
-        
-        
-        
         notificationCenter.addObserver(self, selector: #selector(handleMusicPlayerNowPlayingItemDidChange), name: NSNotification.Name.MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
         notificationCenter.addObserver(self, selector: #selector(handleMusicPlayerDidChangeState), name: NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(handleMusicPlayerDidChangeState), name: NSNotification.Name.MPMusicPlayerControllerVolumeDidChange, object: nil)
         startTimer()
         updatePlayBackControls()
-        update()
-        
+        updateUserInterface()
         guard SKCloudServiceController.authorizationStatus() == .notDetermined else {
             return
         }
@@ -89,15 +91,8 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
                 break
             }
             notificationCenter.post(name: AuthorizationManager.authorizationDidUpdateNotification, object: nil)
-            
         }
-       
-        
-        
-        // Do any additional setup after loading the view.
     }
-    
-    
     
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         return true
@@ -126,74 +121,108 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        
-        
-        
-        
-    }
-    
-    
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    func update() {
-        let currentItem = musicPlayerManager.musicPlayerController.nowPlayingItem
-            guard let artwork = currentItem?.artwork
-                else {
-                    return
+    func updateUserInterface() {
+        if musicPlayerManager.musicPlayerController.playbackState == .playing {
+            if let currentItem = musicPlayerManager.musicPlayerController.nowPlayingItem {
+                songTitleLabel.text = currentItem.title
+                let playbackStoreID = currentItem.playbackStoreID
+                if let artwork = musicPlayerManager.musicPlayerController.nowPlayingItem?.artwork, let image = artwork.image(at: artWorkImage.frame.size) {
+                    print("using local image")
+                    isUsingLocalImage = true
+                    setArtworkImages(image)
+                    changeColors()
+                } else {
+                    isUsingLocalImage = false
+                    guard let developerToken = appleMusicManager.fetchDeveloperToken() else {print("oops");return}
+                    let searchTypes = "songs"
+                    var searchURLComponents = URLComponents()
+                    searchURLComponents.scheme = "https"
+                    searchURLComponents.host = "api.music.apple.com"
+                    searchURLComponents.path = "/v1/catalog/"
+                    searchURLComponents.path += "\(authorizationManager.cloudServiceStoreFrontCountryCode)"
+                    searchURLComponents.path += "/search"
+                    searchURLComponents.queryItems = [
+                        URLQueryItem(name: "term", value: playbackStoreID),
+                        URLQueryItem(name: "types", value: searchTypes)
+                    ]
+                    var request = URLRequest(url: searchURLComponents.url!)
+                    request.httpMethod = "GET"
+                    request.addValue("Bearer \(developerToken)", forHTTPHeaderField: "Authorization")
+                    let dataTask = URLSession.shared.dataTask(with: request) {
+                        (data, response, error) in
+                        print(response!)
+                        if let searchData = data {
+                            guard let results = try? self.appleMusicManager.processMediaItemSections(searchData) else { return}
+                            self.mediaItem = results
+                            let album = self.mediaItem[0][0]
+                            let albumArtworkURL = album.artwork.imageUrl(self.artWorkImage.frame.size)
+                            self.imageManager.fetchImage(url: albumArtworkURL) {(image) in
+                                print("fetching image")
+                                self.setArtworkImages(image!)
+                                self.changeColors()
+                            }
+                        }
+                    }
+                    dataTask.resume()
+                }
+            } else {
+                songTitleLabel.text = " "
             }
-        self.songTitleLabel.text = currentItem?.value(forProperty: MPMediaItemPropertyTitle) as? String
-        guard let image = artwork.image(at: self.artWorkImage.frame.size) else {return}
-        self.artWorkImage.image = image
+        }
+    }
+    
+    func setArtworkImages(_ image: UIImage) {
+        artWorkImage.image = image
         let blurImage = CIImage(image: image)
         let blurFilter = CIFilter(name: "CIGaussianBlur")
         blurFilter?.setValue(blurImage, forKey: kCIInputImageKey)
         blurFilter?.setValue(25, forKey: kCIInputRadiusKey)
         let context = CIContext()
-        let cgImage = context.createCGImage((blurFilter?.outputImage)!, from: (blurImage!.extent))
+        let cgImage = context.createCGImage((blurFilter?.outputImage)!, from: blurImage!.extent)
         let blurredImage = UIImage(cgImage: cgImage!)
-        self.blurArtworkImage.image = blurredImage
-        let centerPoint = CGPoint(x: self.artWorkImage.center.x, y: self.artWorkImage.center.y)
-        self.navigationController?.navigationBar.barTintColor = self.artWorkImage.image?.getPixelColor(centerPoint)
-        self.navigationController?.toolbar.barTintColor = self.artWorkImage.image?.getPixelColor(centerPoint)
-        self.songTitleLabel.textColor = self.artWorkImage.image?.inversedColor(centerPoint)
-        self.progressIndicator.minimumTrackTintColor = self.artWorkImage.image?.getPixelColor(centerPoint)
-        self.progressIndicator.maximumTrackTintColor = self.artWorkImage.image?.inversedColor(centerPoint)
-        self.progressIndicator.thumbTintColor = self.artWorkImage.image?.inversedColor(centerPoint)
-        self.favoriteButton.tintColor = self.artWorkImage.image?.inversedColor(centerPoint)
-        self.playButton.tintColor = self.artWorkImage.image?.inversedColor(centerPoint)
-        self.skipButton.tintColor = self.artWorkImage.image?.inversedColor(centerPoint)
-        self.songTitleLabel.tintColor = self.artWorkImage.image?.inversedColor(centerPoint)
-        self.percentageCompletedLabel.textColor = self.artWorkImage.image?.inversedColor(centerPoint)
-        self.percentageRemainingLabel.textColor = self.artWorkImage.image?.inversedColor(centerPoint)
-        self.playButton.tintColor = self.artWorkImage.image?.inversedColor(centerPoint)
-        self.reverseSkip.tintColor = self.artWorkImage.image?.inversedColor(centerPoint)
+        blurArtworkImage.image = blurredImage
+    }
+    
+    func changeColors() {
+        let centerPoint = CGPoint(x: artWorkImage.center.x, y: artWorkImage.center.y)
+        navigationController?.navigationBar.barTintColor = artWorkImage.image?.getPixelColor(centerPoint)
+        navigationController?.toolbar.barTintColor = artWorkImage.image?.getPixelColor(centerPoint)
+        songTitleLabel.textColor = artWorkImage.image?.inversedColor(centerPoint)
+        progressIndicator.minimumTrackTintColor = artWorkImage.image?.getPixelColor(centerPoint)
+        progressIndicator.maximumTrackTintColor = songTitleLabel.textColor
+        progressIndicator.thumbTintColor = songTitleLabel.textColor
+        favoriteButton.tintColor = songTitleLabel.textColor
+        playButton.tintColor = songTitleLabel.textColor
+        skipButton.tintColor = songTitleLabel.textColor
+        songTitleLabel.tintColor = songTitleLabel.textColor
+        percentageCompletedLabel.textColor = songTitleLabel.textColor
+        percentageRemainingLabel.textColor = songTitleLabel.textColor
+        playButton.tintColor = songTitleLabel.textColor
+        reverseSkip.tintColor = songTitleLabel.textColor
         
     }
     
+    
     @objc func updateSlider() {
-        
         if musicPlayerManager.musicPlayerController.playbackState == .playing {
-            guard !(musicPlayerManager.musicPlayerController.currentPlaybackTime.isNaN || musicPlayerManager.musicPlayerController.currentPlaybackTime.isInfinite) else {return}
-            let minute_ = Int(musicPlayerManager.musicPlayerController.currentPlaybackTime) / 60
-            let second_ = Int(musicPlayerManager.musicPlayerController.currentPlaybackTime.truncatingRemainder(dividingBy: 60))
-            let minute = minute_ > 9 ? "\(minute_)" : "0\(minute_)"
-            let second = second_ > 9 ? "\(second_)" : "0\(second_)"
-            percentageCompletedLabel.text = "\(minute):\(second)"
-            /*
-            startTime = musicPlayerManager.musicPlayerController.currentPlaybackTime
-            startDate = NSDate().addingTimeInterval(startTime)
-            countUpTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateCountUpLabel), userInfo: nil, repeats: true)
-            */
-            remainingTime = (musicPlayerManager.musicPlayerController.nowPlayingItem?.playbackDuration)! - musicPlayerManager.musicPlayerController.currentPlaybackTime
-            endDate = NSDate().addingTimeInterval(remainingTime)
-            coundDownTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateCountDownLabel), userInfo: nil, repeats: true)
-            progressIndicator.value = Float(musicPlayerManager.musicPlayerController.currentPlaybackTime)
-            progressIndicator.maximumValue = Float((musicPlayerManager.musicPlayerController.nowPlayingItem?.playbackDuration)!)
+            let currentPlaybackTime = musicPlayerManager.musicPlayerController.currentPlaybackTime
+            if !currentPlaybackTime.isNaN && !currentPlaybackTime.isInfinite {
+                let minute_ = Int(currentPlaybackTime) / 60
+                let second_ = Int(musicPlayerManager.musicPlayerController.currentPlaybackTime.truncatingRemainder(dividingBy: 60))
+                let minute = minute_ > 9 ? "\(minute_)" : "0\(minute_)"
+                let second = second_ > 9 ? "\(second_)" : "0\(second_)"
+                percentageCompletedLabel.text = "\(minute):\(second)"
+                remainingTime = (musicPlayerManager.musicPlayerController.nowPlayingItem?.playbackDuration)! - musicPlayerManager.musicPlayerController.currentPlaybackTime
+                endDate = NSDate().addingTimeInterval(remainingTime)
+                coundDownTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateCountDownLabel), userInfo: nil, repeats: true)
+                progressIndicator.value = Float(musicPlayerManager.musicPlayerController.currentPlaybackTime)
+                progressIndicator.maximumValue = Float((musicPlayerManager.musicPlayerController.nowPlayingItem?.playbackDuration)!)
+            }
         }
     }
     @objc func updateCountDownLabel() {
@@ -293,14 +322,13 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         DispatchQueue.main.async {
             self.updatePlayBackControls()
             self.startTimer()
-            self.update()
+            self.updateUserInterface()
         }
     }
     
     @objc func handleMusicPlayerNowPlayingItemDidChange() {
         DispatchQueue.main.async {
-            self.update()
-            
+                self.updateUserInterface()
         }
     }
     

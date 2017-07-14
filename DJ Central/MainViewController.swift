@@ -36,6 +36,8 @@ class MainViewController: UIViewController, SlideRevealViewDelegate {
     var appleMusicManager = AppleMusicManager()
     var musicPlayerManager = MusicPlayerManager()
     var menuViewController = MenuViewController()
+    var mediaItem = [[MediaItem]]()
+    let imageManager = ImageManager()
     var isSearchPresented: Bool = false
     var searchAppleMusicTableViewController: SearchAppleMusicTableViewController!
     lazy var authorizationManager: AuthorizationManager = {
@@ -50,6 +52,7 @@ class MainViewController: UIViewController, SlideRevealViewDelegate {
         authorizationManager.requestMediaLibrayAuthorization()
         authorizationManager.requestCloudServiceAuthorization()
         view.bringSubview(toFront: hostView)
+        //view.bringSubview(toFront: artWorkImage)
         updateInterface()
         NotificationCenter.default.addObserver(self,selector: #selector(handleMusicPlayerManagerDidUpdateState),name: NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange,object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleMusicPlayerManagerDidUpdateState), name: NSNotification.Name.MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
@@ -59,34 +62,67 @@ class MainViewController: UIViewController, SlideRevealViewDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         authorizationManager.requestCloudServiceCapabilities()
+        
     }
     
     func updateInterface() {
-            let currentItem = musicPlayerManager.musicPlayerController.nowPlayingItem
-            guard let artwork = currentItem?.artwork
-                else {
-                    return
+        if musicPlayerManager.musicPlayerController.playbackState == .playing {
+            if let currentItem = musicPlayerManager.musicPlayerController.nowPlayingItem {
+                let playbackStoreID = currentItem.playbackStoreID
+                if let artwork = musicPlayerManager.musicPlayerController.nowPlayingItem?.artwork, let image = artwork.image(at: artWorkImage.frame.size) {
+                    artWorkImage.image = image
+                    changeColors()
+                } else {
+                    guard let developerToken = appleMusicManager.fetchDeveloperToken() else {
+                        print("oops")
+                        return }
+                    let searchTypes = "songs"
+                    var searchURLComponents = URLComponents()
+                    searchURLComponents.scheme = "https"
+                    searchURLComponents.host = "api.music.apple.com"
+                    searchURLComponents.path = "/v1/catalog/"
+                    searchURLComponents.path += "\(authorizationManager.cloudServiceStoreFrontCountryCode)"
+                    searchURLComponents.path += "/search"
+                    searchURLComponents.queryItems = [URLQueryItem(name: "term", value: playbackStoreID), URLQueryItem(name: "types", value: searchTypes)]
+                    var request = URLRequest(url: searchURLComponents.url!)
+                    request.httpMethod = "GET"
+                    request.addValue("Bearer \(developerToken)", forHTTPHeaderField: "Authorization")
+                    let dataTask = URLSession.shared.dataTask(with: request) {
+                        (data, response, error) in
+                        if let searchData = data {
+                            guard let results = try? self.appleMusicManager.processMediaItemSections(searchData)    else {return}
+                            self.mediaItem = results
+                            let album = self.mediaItem[0][0]
+                            let albumArtworkURL = album.artwork.imageUrl(self.artWorkImage.frame.size)
+                            self.imageManager.fetchImage(url: albumArtworkURL) {(image) in
+                                self.artWorkImage.image = image
+                                self.changeColors()
+                            }
+                        }
+                    }
+                    dataTask.resume()
+                }
             }
-            let image = artwork.image(at: self.artWorkImage.frame.size)
-            self.artWorkImage.image = image
-            let centerPoint = CGPoint(x: artWorkImage.center.x, y: artWorkImage.center.y)
-            UIBarButtonItem.appearance().tintColor = artWorkImage.image?.inversedColor(centerPoint)
-            menuButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
-            searchButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
-            favoritesButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
-            hostButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
-            browseButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
-            nowPlayingButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
-            libraryButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
-            changeStatusBarStyle()
-            print("changed")
-        
-        
+        }
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func changeColors() {
+        let centerPoint = CGPoint(x: artWorkImage.center.x, y: artWorkImage.center.y)
+        UIBarButtonItem.appearance().tintColor = artWorkImage.image?.inversedColor(centerPoint)
+        menuButton.tintColor = artWorkImage.image?.inversedColor(centerPoint)
+        searchButton.tintColor = menuButton.tintColor
+        favoritesButton.tintColor = menuButton.tintColor
+        hostButton.tintColor = menuButton.tintColor
+        browseButton.tintColor = menuButton.tintColor
+        nowPlayingButton.tintColor = menuButton.tintColor
+        libraryButton.tintColor = menuButton.tintColor
+        changeStatusBarStyle()
+    }
+    
     
     func skipToNextItem() {
         musicPlayerManager.musicPlayerController.skipToNextItem()
@@ -143,7 +179,9 @@ class MainViewController: UIViewController, SlideRevealViewDelegate {
     }
     
     @IBAction func hostAction(_ sender: Any) {
+        
         view.bringSubview(toFront: hostView)
+        //view.bringSubview(toFront: artWorkImage)
         view.sendSubview(toBack: searchView)
         view.sendSubview(toBack: favoritesView)
         view.sendSubview(toBack: libraryView)
@@ -246,8 +284,10 @@ class MainViewController: UIViewController, SlideRevealViewDelegate {
     
     @objc func handleMusicPlayerManagerDidUpdateState() {
         DispatchQueue.main.async {
+            if self.musicPlayerManager.musicPlayerController.playbackState == .playing {
             self.updateInterface()
             self.changeStatusBarStyle()
+            }
         }
     }
     

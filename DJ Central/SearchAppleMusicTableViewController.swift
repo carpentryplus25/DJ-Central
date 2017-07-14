@@ -32,7 +32,7 @@ class SearchAppleMusicTableViewController: UIViewController, UITableViewDataSour
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.rowHeight = 100
+        tableView.rowHeight = UITableViewAutomaticDimension
         
         tableView.estimatedRowHeight = 100
         searchController.searchResultsUpdater = self
@@ -72,6 +72,14 @@ class SearchAppleMusicTableViewController: UIViewController, UITableViewDataSour
         return mediaItems.count
     }
     
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 0 {
+            return NSLocalizedString("Songs", comment: "Songs")
+        } else {
+            return NSLocalizedString("Albums", comment: "Albums")
+        }
+    }
+  
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchAppleMusicTableViewCell.identifier, for: indexPath) as? SearchAppleMusicTableViewCell else {return UITableViewCell() }
         let mediaItem = mediaItems[indexPath.section][indexPath.row]
