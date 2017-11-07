@@ -127,7 +127,7 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func updateUserInterface() {
-        if musicPlayerManager.musicPlayerController.playbackState == .playing {
+        if musicPlayerManager.musicPlayerController.playbackState == .playing || musicPlayerManager.musicPlayerController.playbackState == .paused {
             if let currentItem = musicPlayerManager.musicPlayerController.nowPlayingItem {
                 songTitleLabel.text = currentItem.title
                 let playbackStoreID = currentItem.playbackStoreID
@@ -172,7 +172,14 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }
             } else {
                 songTitleLabel.text = " "
+                let image: UIImage = UIImage(named: "Album_Art")!
+                setArtworkImages(image)
+                changeColors()
             }
+        } else if musicPlayerManager.musicPlayerController.playbackState == .stopped{
+            let image: UIImage = UIImage(named: "Album_Art")!
+            setArtworkImages(image)
+            changeColors()
         }
     }
     

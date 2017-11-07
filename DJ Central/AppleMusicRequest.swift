@@ -39,4 +39,16 @@ struct AppleMusicRequest {
         urlRequest.addValue("Bearer \(developerToken)", forHTTPHeaderField: "Authorization")
         return urlRequest
     }
+    
+    static func createSongRequest(_ term: String, countryCode: String, developerToken: String) -> URLRequest {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = AppleMusicRequest.appleMusicAPIURLString
+        urlComponents.path = "/v1/catalog/\(countryCode)/songs/\(term)"
+        var urlRequest = URLRequest(url: urlComponents.url!)
+        urlRequest.httpMethod = "GET"
+        urlRequest.addValue("Bearer \(developerToken)", forHTTPHeaderField: "Authorization")
+        return urlRequest
+        
+    }
 }

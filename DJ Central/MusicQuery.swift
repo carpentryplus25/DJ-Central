@@ -14,7 +14,6 @@ struct SongInfo {
     var albumTitle: String
     var artistName: String
     var songTitle:  String
-    
     var songId   :  NSNumber
 }
 

@@ -266,17 +266,17 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s0e-dU-hB9">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="425"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Blurry art" translatesAutoresizingMaskIntoConstraints="NO" id="fOc-lT-a2q">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fOc-lT-a2q">
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="425"/>
                                             </imageView>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Art" translatesAutoresizingMaskIntoConstraints="NO" id="mXP-sN-lHF">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mXP-sN-lHF">
                                                 <rect key="frame" x="87" y="61" width="240" height="240"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="240" id="Kf5-4Z-HcH"/>
                                                     <constraint firstAttribute="height" constant="240" id="NBf-lo-5uC"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Back Down South" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ajk-dR-i8i">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ajk-dR-i8i">
                                                 <rect key="frame" x="67" y="21" width="280" height="32"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="32" id="qaz-hC-RM5"/>
@@ -743,8 +743,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Art" width="480" height="480"/>
-        <image name="Blurry art" width="800" height="799"/>
         <image name="Browse" width="25" height="25"/>
         <image name="Favorites" width="38" height="38"/>
         <image name="Host" width="16" height="25"/>
