@@ -27,7 +27,7 @@ class AppleMusicManager {
     }
     
     func fetchDeveloperToken() -> String? {
-        let developerAuthenticationToken: String? = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkdZMks1NU04RkYifQ.eyJpc3MiOiJTV1o3Rzg0TDI0IiwiaWF0IjoxNDk4NTk5MzAwLCJleHAiOjE1MTQzNzA5MDB9.JHDTN4EICjdOsb1xa7v-3SlmAM1xP8GZRNp8EnJcKsWTRUqRRL13rannH7VWnrKCLo0BCbbUqzFqRB97GXWxlw"
+        let developerAuthenticationToken: String? = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkdZMks1NU04RkYifQ.eyJpc3MiOiJTV1o3Rzg0TDI0IiwiaWF0IjoxNTIzMjQwOTI2LCJleHAiOjE1MzkwMDg5MjZ9.OIQJnepe7hStmIxSRwEFTZJLVgvAHc_UO1XQyYvnyjS9eg6FSp19kM9fC5aytXe-BD12QVIYTtzAnVBV-a_GzA"
         return developerAuthenticationToken
     }
     

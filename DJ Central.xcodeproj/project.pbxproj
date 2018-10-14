@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA1EB71120CE0D44007F8F91 /* DJCentralOutputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1EB71020CE0D44007F8F91 /* DJCentralOutputStream.swift */; };
+		AA1EB71420CE0DB7007F8F91 /* DJCentralSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1EB71320CE0DB7007F8F91 /* DJCentralSession.swift */; };
+		AA1EB71620CE0DD3007F8F91 /* DJCentralInputStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1EB71520CE0DD3007F8F91 /* DJCentralInputStream.swift */; };
+		AA1EB71820CF1EBF007F8F91 /* DJCentralStream.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1EB71720CF1EBF007F8F91 /* DJCentralStream.swift */; };
+		AA66989C20FFBD5B00A5773A /* GuestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA66989B20FFBD5B00A5773A /* GuestViewController.swift */; };
+		AA95942E20FF21EF00FCA80F /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA95942D20FF21EF00FCA80F /* MediaPlayer.framework */; };
 		C0B4425F1EE3A2C8009E3B6B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B4425E1EE3A2C8009E3B6B /* AppDelegate.swift */; };
 		C0B442641EE3A2C8009E3B6B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C0B442621EE3A2C8009E3B6B /* Main.storyboard */; };
 		C0B442671EE3A2C8009E3B6B /* DJ_Central.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C0B442651EE3A2C8009E3B6B /* DJ_Central.xcdatamodeld */; };
@@ -65,6 +71,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AA1EB71020CE0D44007F8F91 /* DJCentralOutputStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJCentralOutputStream.swift; sourceTree = "<group>"; };
+		AA1EB71320CE0DB7007F8F91 /* DJCentralSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJCentralSession.swift; sourceTree = "<group>"; };
+		AA1EB71520CE0DD3007F8F91 /* DJCentralInputStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJCentralInputStream.swift; sourceTree = "<group>"; };
+		AA1EB71720CF1EBF007F8F91 /* DJCentralStream.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DJCentralStream.swift; sourceTree = "<group>"; };
+		AA66989B20FFBD5B00A5773A /* GuestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestViewController.swift; sourceTree = "<group>"; };
+		AA95942D20FF21EF00FCA80F /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		C0B4425B1EE3A2C8009E3B6B /* DJ Central.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DJ Central.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0B4425E1EE3A2C8009E3B6B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C0B442631EE3A2C8009E3B6B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -117,6 +129,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA95942E20FF21EF00FCA80F /* MediaPlayer.framework in Frameworks */,
 				F27DDB571EE838D500F2F46C /* AudioToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -138,6 +151,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AA1EB71220CE0D50007F8F91 /* Streaming Service */ = {
+			isa = PBXGroup;
+			children = (
+				AA1EB71020CE0D44007F8F91 /* DJCentralOutputStream.swift */,
+				AA1EB71320CE0DB7007F8F91 /* DJCentralSession.swift */,
+				AA1EB71720CF1EBF007F8F91 /* DJCentralStream.swift */,
+				AA1EB71520CE0DD3007F8F91 /* DJCentralInputStream.swift */,
+			);
+			name = "Streaming Service";
+			sourceTree = "<group>";
+		};
 		C0B442521EE3A2C8009E3B6B = {
 			isa = PBXGroup;
 			children = (
@@ -169,6 +193,7 @@
 				F21D724E1EEA52B800A6D22F /* MusicQuery.swift */,
 				F2A3060E1F9E36420005B5B4 /* SideRevealViewController.swift */,
 				F23104B91EF5D86800CB00C4 /* Utilities */,
+				AA1EB71220CE0D50007F8F91 /* Streaming Service */,
 				F2331C4A1EF5A885000C9682 /* Managers */,
 				F23104BA1EF5D89B00CB00C4 /* Model */,
 				F2331C4B1EF5A8A2000C9682 /* Views */,
@@ -257,6 +282,7 @@
 				F280B4EF1EFC786300C8F57B /* SearchAppleMusicTableViewController.swift */,
 				F280B4ED1EFC6F8800C8F57B /* SearchAppleMusicTableViewCell.swift */,
 				F2F750DD1EED871F0015F5A0 /* LibraryTableViewCell.swift */,
+				AA66989B20FFBD5B00A5773A /* GuestViewController.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -264,6 +290,7 @@
 		F27DDB551EE838D500F2F46C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AA95942D20FF21EF00FCA80F /* MediaPlayer.framework */,
 				F27DDB561EE838D500F2F46C /* AudioToolbox.framework */,
 			);
 			name = Frameworks;
@@ -332,7 +359,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Joseph Thompson";
 				TargetAttributes = {
 					C0B4425A1EE3A2C8009E3B6B = {
@@ -440,16 +467,21 @@
 				F23104BE1EF5ED1900CB00C4 /* ImageManager.swift in Sources */,
 				F2331C511EF5CB4F000C9682 /* SerializationError.swift in Sources */,
 				F2F750DE1EED871F0015F5A0 /* LibraryTableViewCell.swift in Sources */,
+				AA66989C20FFBD5B00A5773A /* GuestViewController.swift in Sources */,
 				F2331C531EF5CD6B000C9682 /* Artwork.swift in Sources */,
 				F2314F0A1EE3AF2B00BED488 /* TabViewController.swift in Sources */,
 				F2331C491EF5A793000C9682 /* MediaItem.swift in Sources */,
+				AA1EB71620CE0DD3007F8F91 /* DJCentralInputStream.swift in Sources */,
+				AA1EB71820CF1EBF007F8F91 /* DJCentralStream.swift in Sources */,
 				C0B442671EE3A2C8009E3B6B /* DJ_Central.xcdatamodeld in Sources */,
 				C0B4425F1EE3A2C8009E3B6B /* AppDelegate.swift in Sources */,
 				F280B4EE1EFC6F8800C8F57B /* SearchAppleMusicTableViewCell.swift in Sources */,
 				F21861DB1EE4F9EE009F6CE1 /* NowPlayingViewController.swift in Sources */,
 				F2D0F2401F02E6450050ABAF /* Extensions.swift in Sources */,
 				F2331C4D1EF5ACC6000C9682 /* AppleMusicRequest.swift in Sources */,
+				AA1EB71120CE0D44007F8F91 /* DJCentralOutputStream.swift in Sources */,
 				F2314F0E1EE3CAD900BED488 /* ServiceManager.swift in Sources */,
+				AA1EB71420CE0DB7007F8F91 /* DJCentralSession.swift in Sources */,
 				F280B4F01EFC786300C8F57B /* SearchAppleMusicTableViewController.swift in Sources */,
 				F2A3060D1F9E36200005B5B4 /* MusicPlayerManager.swift in Sources */,
 				F23104C01EF5F00F00CB00C4 /* MediaLibraryManager.swift in Sources */,
@@ -521,6 +553,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -528,6 +561,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -579,6 +613,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -586,6 +621,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;

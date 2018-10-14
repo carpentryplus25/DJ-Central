@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol SongsTableViewCellDelegate: NSObjectProtocol {
+    func didChangeVoteCount()
+}
+
 class SongsTableViewCell: UITableViewCell {
 
     @IBOutlet weak var voteButton: UIButton!
@@ -15,6 +19,10 @@ class SongsTableViewCell: UITableViewCell {
     @IBOutlet weak var artistLabel: UILabel!
     @IBOutlet weak var songTitleLabel: UILabel!
     @IBOutlet weak var artworkImage: UIImageView!
+    
+    var voteCount: Int = 0
+    weak var delegate: SongsTableViewCellDelegate?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -26,4 +34,8 @@ class SongsTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
+    @IBAction func incrementVoteCount(_ sender: UIButton) {
+        voteCount += 1
+        delegate?.didChangeVoteCount()
+    }
 }

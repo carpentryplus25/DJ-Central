@@ -10,7 +10,16 @@ import UIKit
 import StoreKit
 import MediaPlayer
 
-class MenuViewController: UIViewController {
+class MenuViewController: UIViewController, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "purchase", for: indexPath)
+        return cell
+    }
+    
     
     var interactor: SlideRevealViewInteractor? = nil
     var delegate: SlideRevealViewDelegate? = nil

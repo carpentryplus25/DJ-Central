@@ -11,7 +11,9 @@ import MediaPlayer
 import CoreImage
 import StoreKit
 
-class HostViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class HostViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SongsTableViewCellDelegate {
+    
+    
 
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var skipButton: UIButton!
@@ -46,7 +48,7 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
     var mediaItem = [[MediaItem]]()
     let imageManager = ImageManager()
     var endDate: NSDate!
-    var coundDownTimer = Timer()
+    var coundDownTimer: Timer?
     var remainingTime: TimeInterval = 0
     var startDate: NSDate!
     var countUpTimer = Timer()
@@ -55,9 +57,16 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
     var isUsingLocalImage: Bool = false
     var isUsingCachedImage: Bool = false
     var isFetchingImage: Bool = false
+    var voteCount = 0
+    var session: DJCentralSession?
+    var outputStreamer: DJCentralOutputStream?
+    var song: MPMediaItem?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        session = DJCentralSession(peerDisplayName: UIDevice.current.name)
+        
         let notificationCenter: NotificationCenter = NotificationCenter.default
         guard MPMediaLibrary.authorizationStatus() == .authorized else {return}
         MPMediaLibrary.requestAuthorization { (status) in
@@ -74,9 +83,14 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         notificationCenter.addObserver(self, selector: #selector(handleMusicPlayerNowPlayingItemDidChange), name: NSNotification.Name.MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
         notificationCenter.addObserver(self, selector: #selector(handleMusicPlayerDidChangeState), name: NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange, object: nil)
+        
+       
+        
         startTimer()
+        //changeColors()
         updatePlayBackControls()
         updateUserInterface()
+        
         guard SKCloudServiceController.authorizationStatus() == .notDetermined else {
             return
         }
@@ -94,8 +108,20 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        changeColors()
+        //updateUserInterface()
+        //updatePlayBackControls()
+        //startTimer()
+        //stopPlayback()
+    }
+    
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         return true
+    }
+    
+    func stopPlayback() {
+        musicPlayerManager.musicPlayerController.stop()
     }
     
     func displayMediaLibraryError() {
@@ -130,12 +156,13 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         if musicPlayerManager.musicPlayerController.playbackState == .playing || musicPlayerManager.musicPlayerController.playbackState == .paused {
             if let currentItem = musicPlayerManager.musicPlayerController.nowPlayingItem {
                 songTitleLabel.text = currentItem.title
-                let playbackStoreID = currentItem.playbackStoreID
+                let albumTitle = currentItem.albumTitle
+                let artist = currentItem.artist
                 if let artwork = musicPlayerManager.musicPlayerController.nowPlayingItem?.artwork, let image = artwork.image(at: artWorkImage.frame.size) {
-                    print("using local image")
+                    //print("using local image")
                     isUsingLocalImage = true
                     setArtworkImages(image)
-                    changeColors()
+                    //changeColors()
                 } else {
                     isUsingLocalImage = false
                     guard let developerToken = appleMusicManager.fetchDeveloperToken() else {print("oops");return}
@@ -146,8 +173,12 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
                     searchURLComponents.path = "/v1/catalog/"
                     searchURLComponents.path += "\(authorizationManager.cloudServiceStoreFrontCountryCode)"
                     searchURLComponents.path += "/search"
+                    let expectedArtist = artist?.replacingOccurrences(of: " ", with: "+")
+                    let artistExpected = expectedArtist?.replacingOccurrences(of: "&", with: "")
+                    let expectingArtist = artistExpected?.replacingOccurrences(of: "++", with: "+")
+                    let expectedAlbum = albumTitle?.replacingOccurrences(of: " ", with: "+")
                     searchURLComponents.queryItems = [
-                        URLQueryItem(name: "term", value: playbackStoreID),
+                        URLQueryItem(name: "term", value: (expectingArtist! + "-" + expectedAlbum!)),
                         URLQueryItem(name: "types", value: searchTypes)
                     ]
                     var request = URLRequest(url: searchURLComponents.url!)
@@ -160,11 +191,13 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
                             guard let results = try? self.appleMusicManager.processMediaItemSections(searchData) else { return}
                             self.mediaItem = results
                             let album = self.mediaItem[0][0]
-                            let albumArtworkURL = album.artwork.imageUrl(self.artWorkImage.frame.size)
-                            self.imageManager.fetchImage(url: albumArtworkURL) {(image) in
-                                print("fetching image")
-                                self.setArtworkImages(image!)
-                                self.changeColors()
+                            DispatchQueue.main.async {
+                                let albumArtworkURL = album.artwork.imageUrl(self.artWorkImage.frame.size)
+                                self.imageManager.fetchImage(url: albumArtworkURL) {(image) in
+                                    //print("fetching image")
+                                    self.setArtworkImages(image!)
+                                    //self.changeColors()
+                                }
                             }
                         }
                     }
@@ -174,12 +207,13 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
                 songTitleLabel.text = " "
                 let image: UIImage = UIImage(named: "Album_Art")!
                 setArtworkImages(image)
-                changeColors()
+                //changeColors()
             }
         } else if musicPlayerManager.musicPlayerController.playbackState == .stopped{
             let image: UIImage = UIImage(named: "Album_Art")!
             setArtworkImages(image)
-            changeColors()
+            //changeColors()
+            stopTimer()
         }
     }
     
@@ -193,10 +227,13 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         let cgImage = context.createCGImage((blurFilter?.outputImage)!, from: blurImage!.extent)
         let blurredImage = UIImage(cgImage: cgImage!)
         blurArtworkImage.image = blurredImage
+        changeColors()
     }
     
     func changeColors() {
-        let centerPoint = CGPoint(x: artWorkImage.center.x, y: artWorkImage.center.y)
+        let centerPoint = CGPoint(x: artWorkImage.center.x, y: artWorkImage.center.x)
+        //let color = artWorkImage.image?.getPixelColor(centerPoint)
+        //let inversedColor = artWorkImage.image?.inversedColor(centerPoint)
         navigationController?.navigationBar.barTintColor = artWorkImage.image?.getPixelColor(centerPoint)
         navigationController?.toolbar.barTintColor = artWorkImage.image?.getPixelColor(centerPoint)
         songTitleLabel.textColor = artWorkImage.image?.inversedColor(centerPoint)
@@ -250,14 +287,42 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func stopTimer() {
         timer?.invalidate()
-        coundDownTimer.invalidate()
+        coundDownTimer?.invalidate()
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let songID: NSNumber = albums[indexPath.section].songs[indexPath.row].songId
-        let item: MPMediaItem = musicQuery.getItem(songId: songID)
-        musicPlayerManager.musicPlayerController.nowPlayingItem = item
-        musicPlayerManager.musicPlayerController.play()
+    
+    
+    func getSongNames() -> [String] {
+        var names = [String]()
+        let songs = getSongs()
+        for song in songs {
+            names.append("\(song.value(forProperty: MPMediaItemPropertyTitle)!)")
+        }
+        return names
+    }
+    
+    func getSongs() -> [MPMediaItemCollection] {
+        let songQuery = MPMediaQuery.songs()
+        let songs = songQuery.collections
+        if songs != nil {
+            return songs!
+        }
+        else {
+            return []
+        }
+    }
+    
+    func setSong(song: String) -> Bool {
+        var songSet = false
+        let songs = getSongs()
+        for sng in songs {
+            if String(describing: sng.value(forProperty: MPMediaItemPropertyTitle)!) == song {
+                musicPlayerManager.musicPlayerController.setQueue(with: sng)
+                songSet = true
+                break
+            }
+        }
+        return songSet
     }
     
     
@@ -272,6 +337,8 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let songsCell = tableView.dequeueReusableCell(withIdentifier: "songs") as! SongsTableViewCell
+        songsCell.delegate = self
+        songsCell.voteCountLabel.text = "\(songsCell.voteCount)"
         songsCell.songTitleLabel?.text = albums[indexPath.section].songs[indexPath.row].songTitle
         songsCell.artistLabel?.text = albums[indexPath.section].songs[indexPath.row].artistName
         let songID: NSNumber = albums[indexPath.section].songs[indexPath.row].songId
@@ -279,24 +346,41 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         if let artwork: MPMediaItemArtwork = item.value(forProperty: MPMediaItemPropertyArtwork) as? MPMediaItemArtwork {
             songsCell.artworkImage?.image = artwork.image(at: CGSize(width: songsCell.artworkImage.frame.size.width, height: songsCell.artworkImage.frame.size.height))
         }
+        
         return songsCell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.reloadData()
+    }
+    
+    func tableView(_ tableView: UITableView, willDeselectRowAt indexPath: IndexPath) -> IndexPath? {
+        
+        return indexPath
+    }
+    
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        
+    }
+    
+    //MARK: SongsTableViewCellDelegate Method
+    func didChangeVoteCount() {
+        print("delegate SongsTableViewCellDelegate called")
+        tableView.reloadData()
     }
     
     func changeStatusBarStyle(){
         if self.progressIndicator.minimumTrackTintColor! <= UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1){
             print(self.progressIndicator.minimumTrackTintColor!)
             UINavigationBar.appearance().barStyle = .black
-            
         }
         else {
             UINavigationBar.appearance().barStyle = .default
-            
         }
     }
     
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        
-    }
+    
 
     @IBAction func skipAction(_ sender: Any) {
         mainViewController.skipToNextItem()
@@ -315,10 +399,11 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         switch playbackState {
         case .paused, .stopped, .interrupted:
             playButton.setImage(#imageLiteral(resourceName: "Play"), for: .normal)
+            //stopTimer()
             
         case .playing:
             playButton.setImage(#imageLiteral(resourceName: "Pause"), for: .normal)
-            
+            //startTimer()
         default:
             break
             

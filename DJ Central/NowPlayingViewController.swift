@@ -9,7 +9,7 @@
 import UIKit
 import MediaPlayer
 import CoreImage
-
+/*
 class NowPlayingViewController: UITableViewController {
 
     
@@ -25,7 +25,7 @@ class NowPlayingViewController: UITableViewController {
     @IBOutlet weak var songTitle: UILabel!
     @IBOutlet weak var albumArtWorkImage: UIImageView!
     @IBOutlet weak var percentageCompleteLabel: UILabel!
-    var mediaPlayer = MPMusicPlayerApplicationController()
+    var mediaPlayer = MPMusicPlayerApplicationController.self
     var defaultMediaLibrary = MPMediaLibrary()
     lazy var musicPlayer = MPMusicPlayerController.applicationQueuePlayer
     var timer: Timer?
@@ -44,7 +44,7 @@ class NowPlayingViewController: UITableViewController {
         //mediaPlayer.setQueue(with: MPMediaQuery.songs())
         //mediaPlayer.play()
         startTimer()
-        mediaPlayer.beginGeneratingPlaybackNotifications()
+        //mediaPlayer.beginGeneratingPlaybackNotifications(<#MPMusicPlayerController#>)
          // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -53,7 +53,7 @@ class NowPlayingViewController: UITableViewController {
     }
     
     deinit {
-        mediaPlayer.endGeneratingPlaybackNotifications()
+        //mediaPlayer.endGeneratingPlaybackNotifications(<#MPMusicPlayerController#>)
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -232,5 +232,5 @@ class NowPlayingViewController: UITableViewController {
     */
 
 }
-
+*/
 

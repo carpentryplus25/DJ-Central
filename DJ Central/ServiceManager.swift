@@ -8,16 +8,16 @@
 
 import UIKit
 import MultipeerConnectivity
-
+/*
 protocol  ServiceManagerDelegate {
-    func connectedDevicesChanged(manager: ServiceManager, connectedDevices: [String])
-    func colorChanged(manager: ServiceManager, colorString: String)
+    func session(_ session: ServiceManager, didReceiveAudioStream stream: InputStream)
+    func session(_ session: ServiceManager, didReceiveData data: Data)
     
 }
 
 class ServiceManager: NSObject {
     
-    private let serviceType = "dj-central"
+    private let serviceType = "DJ-Central"
     private let myPeerId = MCPeerID(displayName: UIDevice.current.name)
     private let serviceAdvertiser: MCNearbyServiceAdvertiser
     private let serviceBrowser: MCNearbyServiceBrowser
@@ -34,13 +34,13 @@ class ServiceManager: NSObject {
         self.serviceBrowser = MCNearbyServiceBrowser(peer: myPeerId, serviceType: serviceType)
         super.init()
         self.serviceAdvertiser.delegate = self
-        //self.serviceAdvertiser.startAdvertisingPeer()
+        self.serviceAdvertiser.startAdvertisingPeer()
         self.serviceBrowser.delegate = self
-        //self.serviceBrowser.startBrowsingForPeers()
+        self.serviceBrowser.startBrowsingForPeers()
     }
     deinit {
-        //self.serviceAdvertiser.stopAdvertisingPeer()
-        //self.serviceBrowser.stopBrowsingForPeers()
+        self.serviceAdvertiser.stopAdvertisingPeer()
+        self.serviceBrowser.stopBrowsingForPeers()
     }
     
     func send(colorName : String) {
@@ -78,7 +78,7 @@ extension ServiceManager: MCNearbyServiceBrowserDelegate {
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
         NSLog("%@", "foundPeer: \(peerID)")
         NSLog("%@", "invitePeer: \(peerID)")
-        browser.invitePeer(peerID, to: self.session, withContext: nil, timeout: 10)
+        //browser.invitePeer(peerID, to: self.session, withContext: nil, timeout: 10)
     }
     
     func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
@@ -89,18 +89,29 @@ extension ServiceManager: MCNearbyServiceBrowserDelegate {
 extension ServiceManager: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         NSLog("%@", "peer \(peerID) didChangeState: \(state)")
-        self.delegate?.connectedDevicesChanged(manager: self, connectedDevices:
-            session.connectedPeers.map{$0.displayName})
+        if state == .connecting {
+            print("Connecting to \(peerID.displayName)")
+        }
+        else if state == .connected {
+            print("Connected to \(peerID.displayName)")
+        }
+        else if state == .notConnected {
+            print("Disconnected from \(peerID.displayName)")
+        }
+        
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         NSLog("%@", "didReceiveData: \(data)")
-        let str = String(data: data, encoding: .utf8)!
-        self.delegate?.colorChanged(manager: self, colorString: str)
+        delegate!.session(self, didReceiveData: data)
     }
     
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
         NSLog("%@", "didReceiveStream")
+        if (streamName == "music") {
+            delegate!.session(self, didReceiveAudioStream: stream)
+        }
+        
     }
     
     func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {
@@ -133,3 +144,4 @@ extension ServiceManager: MCSessionDelegate {
     
     
 }
+*/
