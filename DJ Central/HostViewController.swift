@@ -187,8 +187,11 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
                     let dataTask = URLSession.shared.dataTask(with: request) {
                         (data, response, error) in
                         print(response!)
+                        print("data\(data!)")
                         if let searchData = data {
-                            guard let results = try? self.appleMusicManager.processMediaItemSections(searchData) else { return}
+                            guard let results = try? self.appleMusicManager.processMediaItemSections(searchData) else {
+                                print("returned out of guard")
+                                return}
                             self.mediaItem = results
                             let album = self.mediaItem[0][0]
                             DispatchQueue.main.async {
@@ -337,6 +340,7 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let songsCell = tableView.dequeueReusableCell(withIdentifier: "songs") as! SongsTableViewCell
+        songsCell.indexPath = indexPath
         songsCell.delegate = self
         songsCell.voteCountLabel.text = "\(songsCell.voteCount)"
         songsCell.songTitleLabel?.text = albums[indexPath.section].songs[indexPath.row].songTitle
@@ -346,6 +350,7 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         if let artwork: MPMediaItemArtwork = item.value(forProperty: MPMediaItemPropertyArtwork) as? MPMediaItemArtwork {
             songsCell.artworkImage?.image = artwork.image(at: CGSize(width: songsCell.artworkImage.frame.size.width, height: songsCell.artworkImage.frame.size.height))
         }
+        
         
         return songsCell
     }
@@ -365,8 +370,13 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     //MARK: SongsTableViewCellDelegate Method
-    func didChangeVoteCount() {
-        print("delegate SongsTableViewCellDelegate called")
+    func didChangeVoteCount(indexPath: IndexPath) {
+        let songID: NSNumber = albums[indexPath.section].songs[indexPath.row].songId
+        let item: MPMediaItem = musicQuery.getItem(songId: songID)
+        let predicate = MPMediaPropertyPredicate(value: item.persistentID, forProperty: MPMediaItemPropertyPersistentID)
+        let query = MPMediaQuery(filterPredicates: [predicate])
+        let queueDescriptor = MPMusicPlayerMediaItemQueueDescriptor(query: query)
+        musicPlayerManager.musicPlayerController.prepend(queueDescriptor)
         tableView.reloadData()
     }
     

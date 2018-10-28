@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import MediaPlayer
 
 protocol SongsTableViewCellDelegate: NSObjectProtocol {
-    func didChangeVoteCount()
+    func didChangeVoteCount(indexPath: IndexPath)
 }
 
 class SongsTableViewCell: UITableViewCell {
@@ -21,7 +22,10 @@ class SongsTableViewCell: UITableViewCell {
     @IBOutlet weak var artworkImage: UIImageView!
     
     var voteCount: Int = 0
+    var hasVoted: Bool = false
     weak var delegate: SongsTableViewCellDelegate?
+    var musicPlayerManager = MusicPlayerManager()
+    var indexPath = IndexPath()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -35,7 +39,13 @@ class SongsTableViewCell: UITableViewCell {
     }
 
     @IBAction func incrementVoteCount(_ sender: UIButton) {
-        voteCount += 1
-        delegate?.didChangeVoteCount()
+        if !hasVoted {
+            voteCount += 1
+            delegate?.didChangeVoteCount(indexPath: indexPath)
+            hasVoted = true
+        }
+        
+        
+        
     }
 }

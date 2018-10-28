@@ -13,7 +13,7 @@ class MusicPlayerManager: NSObject {
     
     static let didUpdateState = NSNotification.Name("didUpdateState")
     
-    let musicPlayerController = MPMusicPlayerController.systemMusicPlayer
+    let musicPlayerController = MPMusicPlayerController.applicationQueuePlayer
     
     
     override init() {
