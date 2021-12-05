@@ -49,7 +49,7 @@ class DJCentralSession: NSObject, MCSessionDelegate, MCBrowserViewControllerDele
         self.serviceBrowser.startBrowsingForPeers()
         super.init()
         self.serviceBrowser.delegate = self
-        //self.session.delegate = self
+        self.session.delegate = self
         peerID = MCPeerID(displayName: name)
     }
     

@@ -38,14 +38,14 @@ class DJCentralStream: NSObject, StreamDelegate {
     
     func open() {
         stream?.delegate = self
-        stream?.schedule(in: .current, forMode: .defaultRunLoopMode)
+        stream?.schedule(in: .current, forMode: RunLoop.Mode.default)
         stream?.open()
     }
     
     func close() {
         stream?.close()
         stream?.delegate = nil
-        stream?.remove(from: .current, forMode: .defaultRunLoopMode)
+        stream?.remove(from: .current, forMode: RunLoop.Mode.default)
     }
     
     func readData(_ data: UnsafeMutablePointer<UInt8>, maxLenght: Int) -> UInt32 {
@@ -55,13 +55,13 @@ class DJCentralStream: NSObject, StreamDelegate {
     func writeData(_ data: UnsafeMutablePointer<UInt8>, maxLength: UInt32) -> UInt32 {
         return (UInt32(((stream as? OutputStream)?.write(data, maxLength: Int(maxLength)))!))
     }
-    
+    /*
     func dealloc() {
         if stream != nil {
             close()
         }
     }
-    
+    */
     //MARK: StreamDelegate method
     func stream(_ aStream: Stream, handle eventCode: Stream.Event) {
         switch eventCode {

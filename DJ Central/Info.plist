@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string></string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -22,8 +24,30 @@
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>theblueduckpond.com</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSTemporaryExceptionMinimumTLSVersion</key>
+				<string>TLSv1.1</string>
+			</dict>
+		</dict>
+	</dict>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>We need access to your music</string>
+	<string>DJ Central Needs access your music to build playlists your friends can contribute to and vote on order.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_DJ-Central._tcp</string>
+		<string>_DJ-Central._udp</string>
+	</array>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>DJ Central Needs to search your local network for other users.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>eurof55.ttf</string>

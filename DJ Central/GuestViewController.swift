@@ -88,7 +88,7 @@ class GuestViewController: UIViewController, DJCentralSessionDelegate {
         navigationController?.toolbar.barTintColor = color
         tabBarController?.tabBar.barTintColor = color
         //let inversedColor = artworkImage.image?.inversedColor(centerPoint)
-        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedStringKey.foregroundColor: inversedColor as Any], for: .normal)
+        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: inversedColor as Any], for: .normal)
     }
     
     //MARK: - DJCentralSessionDelegate Methods

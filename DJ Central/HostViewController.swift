@@ -83,6 +83,8 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         notificationCenter.addObserver(self, selector: #selector(handleMusicPlayerNowPlayingItemDidChange), name: NSNotification.Name.MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
         notificationCenter.addObserver(self, selector: #selector(handleMusicPlayerDidChangeState), name: NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(prepareToUpdate), name: MainViewController.hostVCTVNotificationUpdate, object: nil)
+        
         
        
         
@@ -116,6 +118,20 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         //stopPlayback()
     }
     
+    @objc func prepareToUpdate(){
+        tableView.reloadData()
+        
+        musicQuery = reloadMusicQuery()
+        
+    }
+    
+    func reloadMusicQuery() -> MusicQuery {
+        let musicQuery: MusicQuery = MusicQuery()
+        
+        return musicQuery
+    }
+    
+    
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         return true
     }
@@ -128,7 +144,7 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         var error: String
         switch MPMediaLibrary.authorizationStatus() {
         case .restricted:
-            error = "Media library access restricted by coporate or parental settings."
+            error = "Media library access restricted by corporate or parental settings."
         case .denied:
             error = "Media library access denied by user."
         default:
@@ -138,7 +154,7 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
         controller.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         controller.addAction(UIAlertAction(title: "Open Settings", style: .default, handler: { (action) in
             if #available(iOS 10.0, *) {
-                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler: nil)
+                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
             } else {
                 // Fallback on earlier versions
             }
@@ -447,3 +463,8 @@ class HostViewController: UIViewController, UITableViewDelegate, UITableViewData
 }
 
 
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
+}

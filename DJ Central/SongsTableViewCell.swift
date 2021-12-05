@@ -44,7 +44,13 @@ class SongsTableViewCell: UITableViewCell {
             delegate?.didChangeVoteCount(indexPath: indexPath)
             hasVoted = true
         }
-        
+        /*
+        if hasVoted {
+            voteCount -= 1
+            delegate?.didChangeVoteCount(indexPath: indexPath)
+            hasVoted = false
+        }
+        */
         
         
     }

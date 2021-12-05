@@ -19,6 +19,7 @@ class AppleMusicManager {
         return URLSession(configuration: urlSessionConfiguration)
     }()
     var storeFrontID: String?
+    var developerAuthenticationToken : String?
     let url = URL(string: "https://www.jwenterprises.co/2017/06/16/token/")
     
     func readContentsAtFilePath(_ url: URL) -> String {
@@ -27,7 +28,45 @@ class AppleMusicManager {
     }
     
     func fetchDeveloperToken() -> String? {
-        let developerAuthenticationToken: String? = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkdZMks1NU04RkYifQ.eyJpc3MiOiJTV1o3Rzg0TDI0IiwiaWF0IjoxNTM5NjkwNTg1LCJleHAiOjE1NTU0NTg1ODV9.QJXRI7yrpfKwcjHjOHEwPIukAgAKkoXEZT7hd4963bIzTgAJVNLwmFqfWycGWoItrpg6s7aIBIQFHzNJVAcsVA"
+        //var developerAuthenticationtoken : String?
+        if developerAuthenticationToken == nil {
+            
+        
+        
+        let json = ["user":"larry"]
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+            let url = URL(string: "http://api.theblueduckpond.com/app")!
+            let request = NSMutableURLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("application/json; charset=utf -8", forHTTPHeaderField: "Content-Type")
+            request.httpBody = jsonData
+            let task = URLSession.shared.dataTask(with: request as URLRequest) {data, response, error in
+                if error != nil {
+                    print("Error -> \(String(describing: error))")
+                    return
+                }
+                //do {
+                    
+                    let stringResults = String(data: data!, encoding: .utf8)
+                    print(stringResults!)
+                self.developerAuthenticationToken = stringResults!
+                    //---> use to turn returned info back into JSON formats let results = try JSONSerialization.jsonObject(with: data!, options: .fragmentsAllowed)
+                    print("Result -> \(stringResults!)")
+               // }
+               // catch {
+               // print("Error -> \(error)")
+               // }
+                
+            }
+            task.resume()
+        }
+            catch{
+                print(error)
+                
+            }
+            return developerAuthenticationToken
+        }
         return developerAuthenticationToken
     }
     

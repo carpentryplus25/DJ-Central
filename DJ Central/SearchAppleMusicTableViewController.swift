@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MediaPlayer
 
 class SearchAppleMusicTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -32,7 +33,7 @@ class SearchAppleMusicTableViewController: UIViewController, UITableViewDataSour
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         
         tableView.estimatedRowHeight = 100
         searchController.searchResultsUpdater = self
@@ -43,7 +44,7 @@ class SearchAppleMusicTableViewController: UIViewController, UITableViewDataSour
         searchController.hidesNavigationBarDuringPresentation = false
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(handleAuthorizationManagerAuthorizationDidUpdateNotification), name: AuthorizationManager.authorizationDidUpdateNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(handleAuthorizationManagerAuthorizationDidUpdateNotification), name: .UIApplicationWillEnterForeground, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(handleAuthorizationManagerAuthorizationDidUpdateNotification), name: UIApplication.willEnterForegroundNotification, object: nil)
         authorizationManager = AuthorizationManager(appleMusicManager: appleMusicManager)
         musicPlayerManager = MusicPlayerManager()
         mediaLibraryManager = MediaLibraryManager(authorizationManager: authorizationManager)
@@ -189,6 +190,7 @@ extension SearchAppleMusicTableViewController: SearchAppleMusicTableViewCellDele
     
     func searchAppleMusicTableViewCell(_ searchAppleMusicTableViewCell: SearchAppleMusicTableViewCell, playMediaItem mediaItem: MediaItem) {
         musicPlayerManager.beginPlayback(itemId: mediaItem.identifier)
+        
     }
 }
 

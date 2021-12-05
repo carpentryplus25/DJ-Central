@@ -37,6 +37,7 @@ class SearchAppleMusicTableViewCell: UITableViewCell {
     @IBAction func playMediaItem(_ sender: UIButton) {
         if let mediaItem = mediaItem {
             delegate?.searchAppleMusicTableViewCell(self, playMediaItem: mediaItem)
+            
         }
         
     }
@@ -54,7 +55,7 @@ class SearchAppleMusicTableViewCell: UITableViewCell {
 
 }
 
-protocol SearchAppleMusicTableViewCellDelegate: class {
+protocol SearchAppleMusicTableViewCellDelegate: AnyObject {
     func searchAppleMusicTableViewCell(_ searchAppleMusicTableViewCell: SearchAppleMusicTableViewCell, addToPlaylist mediaItem: MediaItem)
     
     func searchAppleMusicTableViewCell(_ searchAppleMusicTableViewCell: SearchAppleMusicTableViewCell, playMediaItem mediaItem: MediaItem)

@@ -11,7 +11,8 @@ import MediaPlayer
 
 class MainViewController: UIViewController, SlideRevealViewDelegate, MPMediaPickerControllerDelegate {
 
-    static let didUpdateState = NSNotification.Name("didUpdateState")
+    public static let didUpdateState = NSNotification.Name("didUpdateState")
+    public static let hostVCTVNotificationUpdate = NSNotification.Name("hostVCTVNotificationUdate")
     @IBOutlet weak var favoritesButton: UIBarButtonItem!
     @IBOutlet weak var hostButton: UIBarButtonItem!
     @IBOutlet weak var artWorkImage: UIImageView!
@@ -55,7 +56,7 @@ class MainViewController: UIViewController, SlideRevealViewDelegate, MPMediaPick
         super.viewDidLoad()
         authorizationManager.requestMediaLibrayAuthorization()
         authorizationManager.requestCloudServiceAuthorization()
-        view.bringSubview(toFront: hostView)
+        view.bringSubviewToFront(hostView)
         //view.bringSubview(toFront: artWorkImage)
         //updateInterface()
         NotificationCenter.default.addObserver(self,selector: #selector(handleMusicPlayerManagerDidUpdateState),name: NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange,object: nil)
@@ -127,6 +128,7 @@ class MainViewController: UIViewController, SlideRevealViewDelegate, MPMediaPick
                         }
                     }
                     dataTask.resume()
+                    
                 }
             }
         }
@@ -136,6 +138,9 @@ class MainViewController: UIViewController, SlideRevealViewDelegate, MPMediaPick
             changeColors()
             //stopTimer()
         }
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.post(name: MainViewController.hostVCTVNotificationUpdate, object: nil)
+        
     }
     func setArtworkImages(_ image: UIImage, title: String, playbackTime: TimeInterval, durationTime: TimeInterval) {
         artWorkImage.image = image
@@ -279,69 +284,69 @@ class MainViewController: UIViewController, SlideRevealViewDelegate, MPMediaPick
     
     @IBAction func hostAction(_ sender: Any) {
         
-        view.bringSubview(toFront: hostView)
+        view.bringSubviewToFront(hostView)
         //view.bringSubview(toFront: artWorkImage)
-        view.sendSubview(toBack: searchView)
-        view.sendSubview(toBack: favoritesView)
-        view.sendSubview(toBack: libraryView)
-        view.sendSubview(toBack: nowPlayingView)
-        view.sendSubview(toBack: browseHostLibrary)
+        view.sendSubviewToBack(searchView)
+        view.sendSubviewToBack(favoritesView)
+        view.sendSubviewToBack(libraryView)
+        view.sendSubviewToBack(nowPlayingView)
+        view.sendSubviewToBack(browseHostLibrary)
         
     }
 
     @IBAction func nowPlayingAction(_ sender: Any) {
-        view.bringSubview(toFront: nowPlayingView)
-        view.sendSubview(toBack: favoritesView)
-        view.sendSubview(toBack: libraryView)
-        view.sendSubview(toBack: hostView)
-        view.sendSubview(toBack: browseHostLibrary)
-        view.sendSubview(toBack: searchView)
+        view.bringSubviewToFront(nowPlayingView)
+        view.sendSubviewToBack(favoritesView)
+        view.sendSubviewToBack(libraryView)
+        view.sendSubviewToBack(hostView)
+        view.sendSubviewToBack(browseHostLibrary)
+        view.sendSubviewToBack(searchView)
     
     
     
     }
     @IBAction func browseHostAction(_ sender: Any) {
-        view.bringSubview(toFront: browseHostLibrary)
-        view.sendSubview(toBack: favoritesView)
-        view.sendSubview(toBack: libraryView)
-        view.sendSubview(toBack: hostView)
-        view.sendSubview(toBack: nowPlayingView)
-        view.sendSubview(toBack: searchView)
+        view.bringSubviewToFront(browseHostLibrary)
+        view.sendSubviewToBack(favoritesView)
+        view.sendSubviewToBack(libraryView)
+        view.sendSubviewToBack(hostView)
+        view.sendSubviewToBack(nowPlayingView)
+        view.sendSubviewToBack(searchView)
     
     
     }
     
     @IBAction func libraryAction(_ sender: Any) {
-        view.bringSubview(toFront: libraryView)
-        view.sendSubview(toBack: favoritesView)
-        view.sendSubview(toBack: browseHostLibrary)
-        view.sendSubview(toBack: hostView)
-        view.sendSubview(toBack: nowPlayingView)
-        view.sendSubview(toBack: searchView)
+        view.bringSubviewToFront(libraryView)
+        view.sendSubviewToBack(favoritesView)
+        view.sendSubviewToBack(browseHostLibrary)
+        view.sendSubviewToBack(hostView)
+        view.sendSubviewToBack(nowPlayingView)
+        view.sendSubviewToBack(searchView)
     
     
     
     }
     
     @IBAction func favoriteAction(_ sender: Any) {
-        view.bringSubview(toFront: favoritesView)
-        view.sendSubview(toBack: libraryView)
-        view.sendSubview(toBack: browseHostLibrary)
-        view.sendSubview(toBack: hostView)
-        view.sendSubview(toBack: nowPlayingView)
-        view.sendSubview(toBack: searchView)
+        view.bringSubviewToFront(favoritesView)
+        view.sendSubviewToBack(libraryView)
+        view.sendSubviewToBack(browseHostLibrary)
+        view.sendSubviewToBack(hostView)
+        view.sendSubviewToBack(nowPlayingView)
+        view.sendSubviewToBack(searchView)
     
     
     }
     
     @IBAction func searchAction(_ sender: Any) {
         isSearchPresented = true
-        view.bringSubview(toFront: searchView)
-        view.sendSubview(toBack: favoritesView)
-        view.sendSubview(toBack: libraryView)
-        view.sendSubview(toBack: browseHostLibrary)
-        view.sendSubview(toBack: nowPlayingView)
-        view.sendSubview(toBack: hostView)
+        view.bringSubviewToFront(searchView)
+        view.sendSubviewToBack(favoritesView)
+        view.sendSubviewToBack(libraryView)
+        view.sendSubviewToBack(browseHostLibrary)
+        view.sendSubviewToBack(nowPlayingView)
+        view.sendSubviewToBack(hostView)
         
     }
     
@@ -387,8 +392,11 @@ class MainViewController: UIViewController, SlideRevealViewDelegate, MPMediaPick
             if self.musicPlayerManager.musicPlayerController.playbackState == .playing || self.musicPlayerManager.musicPlayerController.playbackState == .paused {
             self.updateInterface()
             self.changeStatusBarStyle()
+                
             }
         }
+        
+        
     }
     
     @IBAction func invite(_ sender: Any) {
@@ -399,7 +407,7 @@ class MainViewController: UIViewController, SlideRevealViewDelegate, MPMediaPick
     }
     
     func mediaPicker(_ mediaPicker: MPMediaPickerController, didPickMediaItems mediaItemCollection: MPMediaItemCollection) {
-        mediaPicker.dismiss(animated: true, completion: nil)
+        
         song = mediaItemCollection.items[0]
         var info = [AnyHashable : Any]()
         info["title"] = song?.value(forProperty: MPMediaItemPropertyTitle)
@@ -412,7 +420,21 @@ class MainViewController: UIViewController, SlideRevealViewDelegate, MPMediaPick
         if info["artwork"] != nil {
             //setArtworkImages(image!)
         }
+        mediaPicker.dismiss(animated: true, completion: nil)
+        
+        let musicPlayer = musicPlayerManager.musicPlayerController
+        nowPlayingCollection.append(mediaItemCollection)
+        
+        musicPlayer.setQueue(with: mediaItemCollection)
+        musicPlayer.prepareToPlay()
+        musicPlayer.play()
+        
+        
+        
+        
         session?.send(NSKeyedArchiver.archivedData(withRootObject: info))
+        
+        
     }
     
     
@@ -422,6 +444,8 @@ class MainViewController: UIViewController, SlideRevealViewDelegate, MPMediaPick
     
     @IBAction func addSong(_ sender: Any) {
         let picker: MPMediaPickerController = MPMediaPickerController(mediaTypes: MPMediaType.music)
+        picker.allowsPickingMultipleItems = true
+        picker.popoverPresentationController?.sourceView = sender as? UIView
         picker.delegate = self
         self.present(picker, animated: true, completion: nil)
         

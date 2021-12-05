@@ -22,7 +22,7 @@ class MediaLibraryManager: NSObject {
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(handleAuthorizationManagerAuthorizationDidUpdateNotification), name: AuthorizationManager.authorizationDidUpdateNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(handleMediaLibraryDidChangeNotification), name: .MPMediaLibraryDidChange, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(handleMediaLibraryDidChangeNotification), name: .UIApplicationWillEnterForeground, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(handleMediaLibraryDidChangeNotification), name: UIApplication.willEnterForegroundNotification, object: nil)
         handleAuthorizationManagerAuthorizationDidUpdateNotification()
     }
     
@@ -30,7 +30,7 @@ class MediaLibraryManager: NSObject {
         let notificationCenter = NotificationCenter.default
         notificationCenter.removeObserver(self, name: AuthorizationManager.authorizationDidUpdateNotification, object: nil)
         notificationCenter.removeObserver(self, name: NSNotification.Name.MPMediaLibraryDidChange, object: nil)
-        notificationCenter.removeObserver(self, name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        notificationCenter.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
     }
     
     func createPlaylistIfNeeded() {

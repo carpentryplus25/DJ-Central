@@ -26,7 +26,7 @@ class DJCentralInputStream: NSObject, DJCentralStreamDelegate {
         super.init()
         audioStream = DJCentralStream(inputStream: inputStream)
         audioStream?.delegate = self
-        inputStream.schedule(in: .current, forMode: .defaultRunLoopMode)
+        inputStream.schedule(in: .current, forMode: RunLoop.Mode.default)
         inputStream.open()
     }
     

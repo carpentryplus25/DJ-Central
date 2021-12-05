@@ -9,6 +9,12 @@
 import Foundation
 import MediaPlayer
 
+
+public var nowPlayingSongs: [MPMediaItem] = []
+public var nowPlayingCollection: [MPMediaItemCollection] = []
+
+
+
 struct SongInfo {
     
     var albumTitle: String
@@ -26,7 +32,10 @@ struct AlbumInfo {
 
 class MusicQuery {
     
+    let nowPlayingSong = nowPlayingSongs
+    
     func get(songCategory: String) -> [AlbumInfo] {
+        
         
         var albums: [AlbumInfo] = []
         let albumsQuery: MPMediaQuery
@@ -41,13 +50,13 @@ class MusicQuery {
         }
         
         
-        let albumItems: [MPMediaItemCollection] = albumsQuery.collections! as [MPMediaItemCollection]
+        let albumItems: [MPMediaItemCollection] = nowPlayingCollection as [MPMediaItemCollection]
         
         
         for album in albumItems {
             
             let albumItems: [MPMediaItem] = album.items as [MPMediaItem]
-            
+            nowPlayingSongs = albumItems
             var songs: [SongInfo] = []
             
             var albumTitle: String = ""
@@ -93,7 +102,7 @@ class MusicQuery {
         let query: MPMediaQuery = MPMediaQuery()
         query.addFilterPredicate( property )
         
-        var items: [MPMediaItem] = query.items! as [MPMediaItem]
+        let items: [MPMediaItem] = query.items! as [MPMediaItem]
         
         return items[items.count - 1]
         

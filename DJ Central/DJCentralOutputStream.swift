@@ -38,7 +38,7 @@ class DJCentralOutputStream: NSObject, DJCentralStreamDelegate {
             audioStream?.open()
             isStreaming = true
             print("Loop")
-            while isStreaming && RunLoop.current.run(mode: .defaultRunLoopMode, before: .distantFuture) {
+            while isStreaming && RunLoop.current.run(mode: RunLoop.Mode.default, before: .distantFuture) {
                 print("Done")
             }
         }
@@ -65,7 +65,7 @@ class DJCentralOutputStream: NSObject, DJCentralStreamDelegate {
         }
         var blockBuffer: CMBlockBuffer?
         var audioBufferList = AudioBufferList()
-        let err: OSStatus? = CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(sampleBuffer!, nil, &audioBufferList, MemoryLayout<AudioBufferList>.size, nil, nil, kCMSampleBufferFlag_AudioBufferList_Assure16ByteAlignment, &blockBuffer)
+        let err: OSStatus? = CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(sampleBuffer!, bufferListSizeNeededOut: nil, bufferListOut: &audioBufferList, bufferListSize: MemoryLayout<AudioBufferList>.size, blockBufferAllocator: nil, blockBufferMemoryAllocator: nil, flags: kCMSampleBufferFlag_AudioBufferList_Assure16ByteAlignment, blockBufferOut: &blockBuffer)
         if err == nil {
             return
         }

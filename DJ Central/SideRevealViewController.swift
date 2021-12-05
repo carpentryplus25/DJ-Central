@@ -52,7 +52,7 @@ struct SlideRevealViewHelper {
         }
     }
     
-    static func mapGestureStateToInteractor(_ gestureState: UIGestureRecognizerState, progress: CGFloat, interactor: SlideRevealViewInteractor?, triggerSegue: () -> Void) {
+    static func mapGestureStateToInteractor(_ gestureState: UIGestureRecognizer.State, progress: CGFloat, interactor: SlideRevealViewInteractor?, triggerSegue: () -> Void) {
         guard let interactor = interactor else {
             return
         }
